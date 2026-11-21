@@ -1,0 +1,28 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# Testing
+/coverage
+/.vitest
+
+# Next.js build output
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# Secrets: only the template is committed
+.env
+.env.*
+!.env.example
+*.pem
+
+# Platform, debug and OS files
+.vercel
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
