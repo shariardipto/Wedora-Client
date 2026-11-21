@@ -1,20 +1,163 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "./shadcn-utilities.css";
 
-/* Foundation tokens only. The full Wedora design system (fonts, palette,
-   shadcn variables, dark mode) is introduced in P1. */
+/* ------------------------------------------------------------------
+   Wedora design tokens — "Ivory & Champagne"
+   Light theme only (no dark-mode toggle in scope).
+------------------------------------------------------------------- */
 :root {
-  --background: #fbf8f3;
-  --foreground: #2b2326;
+  color-scheme: light;
+
+  --background: #fbf8f3; /* ivory */
+  --foreground: #2b2326; /* charcoal */
+  --card: #ffffff;
+  --card-foreground: #2b2326;
+  --popover: #ffffff;
+  --popover-foreground: #2b2326;
+  --primary: #6b2d3f; /* wine */
+  --primary-foreground: #fbf8f3;
+  --secondary: #f3e3df; /* blush */
+  --secondary-foreground: #4a2430;
+  --muted: #f4efe8;
+  --muted-foreground: #6f6360; /* taupe — 5.6:1 on ivory */
+  --accent: #f1e7d8; /* champagne tint */
+  --accent-foreground: #2b2326;
+  --destructive: #b42318;
+  --border: #e9e1da;
+  --input: #ddd2c8;
+  --ring: #b8925a;
+
+  /* Brand extras */
+  --gold: #b8925a; /* decorative: icons, rules, large display text */
+  --gold-strong: #8c6a3b; /* gold for small text — 4.9:1 on ivory */
+  --gold-light: #dcbf8e; /* gold for small text on wine/night — 5.9:1 on wine */
+  --wine-deep: #4a1f2c;
+  --night: #241a1d; /* footer / dark bands */
+
+  --chart-1: #6b2d3f;
+  --chart-2: #b8925a;
+  --chart-3: #c98d8f;
+  --chart-4: #7d8f75;
+  --chart-5: #8a7f7a;
+
+  --radius: 0.75rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2b2326;
+  --sidebar-primary: #6b2d3f;
+  --sidebar-primary-foreground: #fbf8f3;
+  --sidebar-accent: #f3e3df;
+  --sidebar-accent-foreground: #4a2430;
+  --sidebar-border: #e9e1da;
+  --sidebar-ring: #b8925a;
 }
 
 @theme inline {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), "Times New Roman", Georgia, serif;
+  --font-heading: var(--font-display);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
+  --color-gold-light: var(--gold-light);
+  --color-wine-deep: var(--wine-deep);
+  --color-night: var(--night);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply scroll-smooth font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight text-balance;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Shared layout primitives */
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility section-y {
+  padding-block: 4.5rem;
+  @media (width >= 48rem) {
+    padding-block: 6rem;
+  }
+}
+
+@utility eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-strong);
 }
