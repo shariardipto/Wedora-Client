@@ -10,7 +10,7 @@ Web client for **Wedora**, a wedding planning platform where customers discover 
 - Sticky responsive navbar that switches instantly to a profile dropdown (name, photo, Dashboard, Profile Settings, Logout) after sign-in
 - Footer with brand, navigation, category links, contact details and social links
 - Home page: hero banner, service categories, Why Choose Wedora, How Wedora Works and a vendor call-to-action
-- **Authentication (Better Auth):** email/password and Google sign-in, Customer or Vendor account types, optional profile photo uploaded to ImgBB, password rules (6+ characters, upper- and lowercase)
+- **Authentication (Better Auth):** email/password and Google sign-in, Customer or Vendor account types, password rules (6+ characters, upper- and lowercase); profile photos are uploaded to ImgBB from Profile Settings after sign-in, and the dashboard prompts users who haven't added one
 - **Security:** admin accounts can't be created by sign-up; role, block status and subscription fields can't be set by users; blocked users can't sign in; open-redirect-safe return URLs
 - **Protected routes:** sign-in redirect with return path, role-specific dashboards (users are sent back to their own dashboard if they edit the URL), one-time account type choice for Google users
 - Profile Settings: name, photo, phone and business name (vendors)

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { uploadImageAction } from "@/actions/upload-image";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -26,12 +25,9 @@ import {
   type SelfServiceRole,
   type SignUpInput,
 } from "@/lib/auth/validation";
-import { AvatarPicker } from "./avatar-picker";
 import { GoogleButton } from "./google-button";
 import { PasswordInput } from "./password-input";
 import { RoleChoice } from "./role-choice";
-
-type Stage = "idle" | "creating" | "uploading";
 
 export function SignUpForm({
   callbackUrl,
@@ -41,15 +37,13 @@ export function SignUpForm({
   defaultRole?: SelfServiceRole;
 }) {
   const router = useRouter();
-  const [stage, setStage] = useState<Stage>("idle");
-  const [avatar, setAvatar] = useState<File | null>(null);
-  const [avatarError, setAvatarError] = useState<string | null>(null);
+  // Stays true after success while we navigate away, so the form can't be resubmitted.
+  const [submitting, setSubmitting] = useState(false);
 
   const {
     register,
     control,
     handleSubmit,
-
     formState: { errors },
   } = useForm<SignUpInput>({
     resolver: zodResolver(signUpSchema),
@@ -62,12 +56,11 @@ export function SignUpForm({
     },
   });
 
-  const busy = stage !== "idle";
+  const busy = submitting;
   const accountType = useWatch({ control, name: "accountType" });
-  const name = useWatch({ control, name: "name" });
 
   async function onSubmit(values: SignUpInput) {
-    setStage("creating");
+    setSubmitting(true);
     const { data, error } = await authClient.signUp.email({
       name: values.name,
       email: values.email,
@@ -79,26 +72,10 @@ export function SignUpForm({
 
     if (error || !data) {
       toast.error(authErrorMessage(error, "We couldn’t create your account. Please try again."));
-      setStage("idle");
+      setSubmitting(false);
       return;
     }
-
-    // Optional profile photo: uploaded after sign-up, once a session exists.
-    if (avatar) {
-      setStage("uploading");
-      const formData = new FormData();
-      formData.set("file", avatar);
-      formData.set("purpose", "avatar");
-      const upload = await uploadImageAction(formData).catch(() => null);
-      if (upload?.ok) {
-        const { error: updateError } = await authClient.updateUser({ image: upload.url });
-        if (updateError) toast.warning("Your photo couldn’t be saved. You can add it in Profile Settings.");
-      } else {
-        toast.warning(
-          `${upload?.message ?? "Your photo couldn’t be uploaded."} You can add one later in Profile Settings.`,
-        );
-      }
-    }
+    // Profile photos are added after sign-in, from Profile Settings.
 
     toast.success(`Welcome to Wedora, ${values.name.split(" ")[0]}! Your account is ready.`);
     router.replace(postAuthDestination(values.accountType, callbackUrl));
@@ -202,27 +179,9 @@ export function SignUpForm({
             <FieldError errors={[errors.password]} />
           </Field>
 
-          <Field>
-            <FieldLabel>
-              Profile photo <span className="font-normal text-muted-foreground">(optional)</span>
-            </FieldLabel>
-            <AvatarPicker
-              file={avatar}
-              onFileChange={setAvatar}
-              name={name}
-              disabled={busy}
-              error={avatarError ?? undefined}
-              onError={setAvatarError}
-            />
-          </Field>
-
           <Button type="submit" disabled={busy} className="h-11 w-full rounded-full text-sm">
             {busy && <Spinner />}
-            {stage === "creating"
-              ? "Creating your account…"
-              : stage === "uploading"
-                ? "Uploading your photo…"
-                : "Create Account"}
+            {busy ? "Creating your account…" : "Create Account"}
           </Button>
         </FieldGroup>
       </form>

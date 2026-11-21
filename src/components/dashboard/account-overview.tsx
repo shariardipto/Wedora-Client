@@ -3,6 +3,7 @@ import {
   ArrowRightIcon,
   BadgeCheckIcon,
   BriefcaseIcon,
+  CameraIcon,
   CalendarHeartIcon,
   CrownIcon,
   MailIcon,
@@ -14,6 +15,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SessionUser } from "@/lib/auth/server";
+
+const PHOTO_HINT = {
+  customer: "A photo helps vendors recognize you when you send booking requests.",
+  vendor: "A photo helps couples recognize and trust your business.",
+  admin: "Personalize your admin account with a profile photo.",
+} as const;
 
 const ROLE_COPY = {
   customer: {
@@ -69,6 +76,27 @@ export function AccountOverview({ user }: { user: SessionUser }) {
           </Link>
         </Button>
       </header>
+
+      {/* Profile photos are added after sign-in (not during sign-up). */}
+      {!user.image && (
+        <div className="flex flex-col gap-4 rounded-2xl border border-dashed border-gold/60 bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <span className="grid size-11 shrink-0 place-items-center rounded-full bg-secondary text-primary">
+              <CameraIcon className="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="font-semibold">Add a profile photo</p>
+              <p className="text-sm text-muted-foreground">{PHOTO_HINT[role]}</p>
+            </div>
+          </div>
+          <Button asChild className="h-10 shrink-0 self-start rounded-full px-5 sm:self-auto">
+            <Link href="/dashboard/profile">
+              <CameraIcon data-icon="inline-start" />
+              Upload photo
+            </Link>
+          </Button>
+        </div>
+      )}
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         <Card>
