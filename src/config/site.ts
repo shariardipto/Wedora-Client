@@ -11,10 +11,10 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   contact: {
     email: "support@wedora.app",
-    phone: "+880 1700-000000",
-    phoneHref: "tel:+8801700000000",
-    address: "Gulshan Avenue, Dhaka 1212, Bangladesh",
-    hours: "Sat – Thu, 10am – 7pm",
+    phone: "+1 (512) 555-0147",
+    phoneHref: "tel:+15125550147",
+    address: "Austin, Texas, United States",
+    hours: "Mon – Fri, 9am – 6pm CT",
   },
   socials: [
     { name: "Facebook", href: "https://www.facebook.com/" },

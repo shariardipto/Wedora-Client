@@ -1,4 +1,5 @@
 import { CategoryGrid } from "@/components/home/category-grid";
+import { FeaturedServices } from "@/components/home/featured-services";
 import { Hero } from "@/components/home/hero";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { VendorCta } from "@/components/home/vendor-cta";
@@ -8,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      {/* P3: Featured Wedding Services (6+ approved & active from the database) goes here. */}
+      <FeaturedServices />
       <CategoryGrid />
       <WhyChoose />
       <HowItWorks />

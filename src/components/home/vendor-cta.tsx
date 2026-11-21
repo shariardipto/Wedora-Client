@@ -2,12 +2,15 @@ import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "lucide-react";
 import { BrandLogo } from "@/components/brand/logo";
 import { Reveal } from "@/components/motion/reveal";
+import { Price } from "@/components/shared/price";
 import { Button } from "@/components/ui/button";
 
 const perks: React.ReactNode[] = [
   "Free plan with up to 3 active services",
   "Booking requests in one dashboard",
-  "Premium: unlimited services & badge — $29/month",
+  <>
+    Premium: unlimited services &amp; badge — <Price amount={29} className="font-semibold" />/month
+  </>,
 ];
 
 export function VendorCta() {

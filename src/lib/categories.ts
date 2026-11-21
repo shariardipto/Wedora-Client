@@ -32,7 +32,7 @@ export const SERVICE_CATEGORIES = [
   {
     slug: "fashion",
     name: "Wedding Fashion",
-    description: "Gowns, sherwanis, suits and finishing touches.",
+    description: "Gowns, suits, tuxedos and finishing touches.",
   },
 ] as const;
 
