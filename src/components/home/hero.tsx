@@ -42,7 +42,7 @@ export function Hero() {
           src={heroImage}
           alt=""
           fill
-          priority
+          preload
           placeholder="blur"
           sizes="100vw"
           className="object-cover object-[60%_center]"

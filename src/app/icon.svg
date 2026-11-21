@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Wedora">
-  <rect width="64" height="64" rx="14" fill="#fbf8f3"/>
-  <circle cx="25" cy="34" r="13" fill="none" stroke="#b8925a" stroke-width="4.5"/>
-  <circle cx="39" cy="34" r="13" fill="none" stroke="#6b2d3f" stroke-width="4.5"/>
-  <path d="M39 13.5l3.5 4-3.5 4-3.5-4z" fill="#b8925a"/>
-</svg>

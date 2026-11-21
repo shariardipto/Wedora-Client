@@ -1,48 +1,83 @@
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import logoColored from "@/assets/brand/logo-colored.png";
+import logoWhite from "@/assets/brand/logo-white.png";
 
-/** Two interlocking rings with a small diamond — the Wedora mark. */
-export function LogoMark({ className }: { className?: string }) {
+/** Intrinsic aspect ratio of the logo artwork (1200 × 674). */
+const RATIO = logoColored.width / logoColored.height;
+
+export type LogoVariant = "colored" | "white";
+
+type BrandLogoProps = {
+  /** "colored" for light backgrounds, "white" for dark ones (white wordmark). */
+  variant?: LogoVariant;
+  /**
+   * Largest rendered height in CSS px. Used to request a right-sized image
+   * (1x/2x) — set the visible height with `className` (e.g. "h-12 md:h-14").
+   */
+  height?: number;
+  className?: string;
+  /** Above-the-fold logos (navbar) load eagerly. */
+  eager?: boolean;
+  alt?: string;
+  /**
+   * Optical centering for centered layouts. The left flourish makes the
+   * artwork asymmetric: the "W"/WEDORA wordmark sits at 66% of the width,
+   * so the image is shifted left by 16% to put the wordmark on the axis.
+   */
+  centered?: boolean;
+};
+
+/** The Wedora monogram + wordmark artwork. */
+export function BrandLogo({
+  variant = "colored",
+  height = 56,
+  className,
+  eager,
+  alt = "Wedora",
+  centered = false,
+}: BrandLogoProps) {
   return (
-    <svg
-      viewBox="0 0 48 40"
-      className={cn("h-7 w-auto", className)}
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle cx="17" cy="23" r="12" stroke="var(--gold)" strokeWidth="3.2" />
-      <circle cx="31" cy="23" r="12" stroke="currentColor" strokeWidth="3.2" />
-      <path d="M31 2.5 34 6l-3 3.5L28 6z" fill="var(--gold)" />
-    </svg>
+    <Image
+      src={variant === "white" ? logoWhite : logoColored}
+      alt={alt}
+      height={height}
+      width={Math.round(height * RATIO)}
+      loading={eager ? "eager" : undefined}
+      draggable={false}
+      className={cn("w-auto max-w-none select-none", centered && "-translate-x-[16%]", className)}
+    />
   );
 }
 
 type LogoProps = {
   className?: string;
-  /** "light" for dark backgrounds such as the footer. */
-  tone?: "dark" | "light";
+  variant?: LogoVariant;
+  /** Visible logo height classes. */
+  imageClassName?: string;
+  height?: number;
+  eager?: boolean;
 };
 
-export function Logo({ className, tone = "dark" }: LogoProps) {
+/** Logo linking home — used in the navbar and footer. */
+export function Logo({
+  className,
+  variant = "colored",
+  imageClassName = "h-12 md:h-14",
+  height = 56,
+  eager,
+}: LogoProps) {
   return (
     <Link
       href="/"
       aria-label="Wedora home"
       className={cn(
-        "inline-flex items-center gap-2 rounded-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
-        tone === "dark" ? "text-primary" : "text-background",
+        "inline-flex shrink-0 items-center rounded-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
         className,
       )}
     >
-      <LogoMark />
-      <span
-        className={cn(
-          "font-display text-[1.75rem] leading-none font-semibold tracking-tight",
-          tone === "dark" ? "text-foreground" : "text-background",
-        )}
-      >
-        Wedora
-      </span>
+      <BrandLogo variant={variant} height={height} className={imageClassName} eager={eager} />
     </Link>
   );
 }

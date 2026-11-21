@@ -1,4 +1,4 @@
-import { LogoMark } from "@/components/brand/logo";
+import { BrandLogo } from "@/components/brand/logo";
 import { cn } from "@/lib/utils";
 
 type StatusMessageProps = {
@@ -24,7 +24,7 @@ export function StatusMessage({
         className,
       )}
     >
-      <LogoMark className="h-12 text-primary" />
+      <BrandLogo centered height={96} className="h-20 sm:h-24" />
       {code && (
         <p className="mt-6 font-display text-7xl leading-none font-semibold text-gold sm:text-8xl">
           {code}

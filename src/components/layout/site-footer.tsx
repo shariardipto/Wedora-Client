@@ -32,7 +32,7 @@ export function SiteFooter() {
     <footer className="bg-night text-background">
       <div className="container-page grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1.3fr] lg:gap-10">
         <div className="max-w-xs">
-          <Logo tone="light" />
+          <Logo variant="white" imageClassName="h-16" height={64} />
           <p className="mt-5 text-sm leading-7 text-background/70">
             {siteConfig.description}
           </p>

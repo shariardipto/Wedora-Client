@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "lucide-react";
-import { LogoMark } from "@/components/brand/logo";
+import { BrandLogo } from "@/components/brand/logo";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 
-const perks = [
+const perks: React.ReactNode[] = [
   "Free plan with up to 3 active services",
   "Booking requests in one dashboard",
   "Premium: unlimited services & badge — $29/month",
@@ -20,7 +20,7 @@ export function VendorCta() {
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 -bottom-28 -z-10 text-primary-foreground opacity-[0.08] sm:-right-16 sm:-bottom-24"
           >
-            <LogoMark className="h-72 sm:h-96" />
+            <BrandLogo variant="white" alt="" height={384} className="h-72 sm:h-96" />
           </div>
           <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
             <div>
@@ -40,8 +40,8 @@ export function VendorCta() {
             </div>
             <div>
               <ul className="space-y-3">
-                {perks.map((perk) => (
-                  <li key={perk} className="flex items-start gap-3 text-sm">
+                {perks.map((perk, index) => (
+                  <li key={index} className="flex items-start gap-3 text-sm">
                     <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-gold text-night">
                       <CheckIcon className="size-3.5" aria-hidden="true" />
                     </span>
