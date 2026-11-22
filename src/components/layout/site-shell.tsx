@@ -1,3 +1,4 @@
+import { PageLoader } from "@/components/motion/page-loader";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
@@ -6,6 +7,7 @@ import { SiteHeader } from "./site-header";
 export function SiteShell({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <PageLoader />
       <SmoothScroll />
       <a
         href="#main-content"

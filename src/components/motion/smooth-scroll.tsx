@@ -39,12 +39,19 @@ export function SmoothScroll() {
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
-    // Radix dialogs lock the page (data-scroll-locked on <body>); pause Lenis meanwhile.
-    const lockObserver = new MutationObserver(() => {
-      if (document.body.hasAttribute("data-scroll-locked")) lenis.stop();
+    // Pause Lenis while Radix dialogs lock the page (data-scroll-locked on <body>)
+    // or the full-page intro is playing (html.intro-active).
+    const syncLock = () => {
+      const locked =
+        document.body.hasAttribute("data-scroll-locked") ||
+        document.documentElement.classList.contains("intro-active");
+      if (locked) lenis.stop();
       else lenis.start();
-    });
+    };
+    syncLock();
+    const lockObserver = new MutationObserver(syncLock);
     lockObserver.observe(document.body, { attributes: true, attributeFilter: ["data-scroll-locked"] });
+    lockObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
     return () => {
       lockObserver.disconnect();

@@ -35,6 +35,7 @@ Web client for **Wedora**, a wedding planning platform where customers discover 
   - Lenis smooth scrolling synced with GSAP ScrollTrigger.
   - Scroll-reactive category marquee and parallax photos.
   - 3D tilt cards with glare, magnetic buttons, an aurora vendor band and CSS petals on sign-in and payment success.
+  - Full-page intro on every refresh of public pages: the white logo rises on a golden-hour backdrop with twinkling gold dust while a gold line counts to 100, then the panel collapses into the floating navbar and the hero animation begins.
   - Floating glass navbar that turns dark over dark sections and light over ivory ones. It has an orbiting gold edge-light, a sliding hover indicator and a gold reading-progress line, and tucks away while you scroll down. Phones get a full-screen menu with large serif links.
   - Everything is skipped for reduced motion, and the 3D scene only loads when WebGL is available.
 - Custom 404, error and loading states

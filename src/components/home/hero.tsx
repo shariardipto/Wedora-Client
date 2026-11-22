@@ -15,6 +15,7 @@ import {
 import { Magnetic } from "@/components/motion/magnetic";
 import { Button } from "@/components/ui/button";
 import { MOTION_OK, gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { afterIntro } from "@/lib/intro";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/images/hero-couple.jpg";
 
@@ -60,7 +61,8 @@ export function Hero() {
         const title = q("#hero-title")[0];
         const split = title ? SplitText.create(title, { type: "words", wordsClass: "split-word" }) : null;
 
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        // Built now (so everything starts hidden), played once the page loader has revealed the page.
+        const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
         tl.from(q("[data-hero-rule]"), { scaleX: 0, transformOrigin: "left center", duration: 0.9 }, 0)
           .from(q("[data-hero-eyebrow]"), { autoAlpha: 0, x: -12, duration: 0.7 }, 0.1)
           .from(
@@ -91,7 +93,12 @@ export function Hero() {
         gsap.to(q("[data-hero-copy]"), { yPercent: -14, autoAlpha: 0.15, ease: "none", scrollTrigger: scrub });
         gsap.to(q("[data-hero-visual]"), { yPercent: 12, ease: "none", scrollTrigger: scrub });
 
-        return () => split?.revert();
+        const cancelIntroWait = afterIntro(() => tl.play());
+
+        return () => {
+          cancelIntroWait();
+          split?.revert();
+        };
       });
       mm.add("(prefers-reduced-motion: reduce)", () => {
         gsap.set(gsap.utils.selector(root)("[data-reveal]"), { autoAlpha: 1 });

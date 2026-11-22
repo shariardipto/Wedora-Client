@@ -48,7 +48,7 @@ function useNavChrome(pathname: string) {
 
       const beneath = document
         .elementsFromPoint(window.innerWidth / 2, 44)
-        .find((el) => !el.closest("[data-site-header]"));
+        .find((el) => !el.closest("[data-site-header],[data-page-loader]"));
       setTheme(beneath?.closest<HTMLElement>("[data-nav-theme]")?.dataset.navTheme === "dark" ? "dark" : "light");
 
       const max = document.documentElement.scrollHeight - window.innerHeight;

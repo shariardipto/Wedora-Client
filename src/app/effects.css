@@ -256,6 +256,69 @@
     transform: scaleX(var(--progress, 0));
   }
 
+  /* Full-page intro (components/motion/page-loader.tsx). Shown only when JS runs and
+     motion is allowed; a 7 s fallback removes it if a script ever fails. */
+  .page-loader {
+    display: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .page-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: loader-fallback 0s linear 7s forwards;
+    }
+  }
+  @keyframes loader-fallback {
+    to {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+  /* The hero's palette, but with round glows sized to the screen (vmin/vmax),
+     so it stays balanced on tall phones and wide desktops alike. */
+  .page-loader {
+    background:
+      radial-gradient(circle at 50% 44%, rgb(201 155 94 / 0.3) 0, rgb(201 155 94 / 0.12) 28vmin, transparent 58vmin),
+      radial-gradient(circle at 0% 100%, rgb(107 45 63 / 0.6) 0, transparent 70vmax),
+      radial-gradient(circle at 100% 0%, rgb(74 31 44 / 0.85) 0, transparent 60vmax),
+      linear-gradient(180deg, #1d0e13 0%, var(--night) 100%);
+  }
+  .page-loader-logo,
+  .page-loader-meta {
+    opacity: 0;
+  }
+  /* Twinkling CSS gold dust (components/motion/gold-dust.tsx). */
+  .dust {
+    position: absolute;
+    border-radius: 9999px;
+    opacity: 0.35;
+    background: radial-gradient(circle, #fbeccb 0%, rgb(240 211 154 / 0.7) 40%, transparent 70%);
+    box-shadow: 0 0 6px rgb(240 211 154 / 0.5);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .dust {
+      animation: dust-twinkle 3s ease-in-out infinite;
+    }
+  }
+  @keyframes dust-twinkle {
+    0%,
+    100% {
+      opacity: 0.12;
+      transform: translate3d(0, 0, 0) scale(0.7);
+    }
+    50% {
+      opacity: 1;
+      transform: translate3d(0, -12px, 0) scale(1);
+    }
+  }
+  /* No scrolling while the intro plays (Lenis is paused too). */
+  html.intro-active {
+    overflow: hidden;
+  }
+
   /* CSS petals (components/motion/falling-petals.tsx). */
   .petal {
     position: absolute;

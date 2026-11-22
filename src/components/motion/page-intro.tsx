@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { MOTION_OK, gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { afterIntro } from "@/lib/intro";
 import { cn } from "@/lib/utils";
 
 /**
@@ -30,12 +31,16 @@ export function PageIntro({
         if (!heading) return;
         gsap.set(heading, { autoAlpha: 1 });
         const split = SplitText.create(heading, { type: "words", wordsClass: "split-word" });
-        gsap
-          .timeline({ defaults: { ease: "power3.out" } })
+        const tl = gsap
+          .timeline({ paused: true, defaults: { ease: "power3.out" } })
           .from(q("[data-eyebrow]"), { autoAlpha: 0, x: -10, duration: 0.6 }, 0)
           .from(split.words, { yPercent: 80, autoAlpha: 0, filter: "blur(8px)", duration: 0.9, stagger: 0.06, ease: "power4.out", clearProps: "filter,transform" }, 0.05)
           .from(q("[data-description]"), { autoAlpha: 0, y: 12, duration: 0.7 }, 0.35);
-        return () => split.revert();
+        const cancelIntroWait = afterIntro(() => tl.play());
+        return () => {
+          cancelIntroWait();
+          split.revert();
+        };
       });
       mm.add("(prefers-reduced-motion: reduce)", () => {
         gsap.set(gsap.utils.selector(root)("h1"), { autoAlpha: 1 });
