@@ -35,10 +35,21 @@ function useSceneEnabled() {
     // Low-end devices keep the static hero (photo + gradient): smooth scrolling matters more.
     const nav = navigator as Navigator & { deviceMemory?: number };
     if ((nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4) return;
+    // No real GPU (hardware acceleration off, VMs, headless): browsers fall back to software
+    // WebGL, which runs the scene on the CPU and makes the whole page lag. Keep the static hero.
     const probe = document.createElement("canvas");
-    const context = probe.getContext("webgl2") ?? probe.getContext("webgl");
+    const options: WebGLContextAttributes = { failIfMajorPerformanceCaveat: true };
+    const context: WebGLRenderingContext | WebGL2RenderingContext | null =
+      probe.getContext("webgl2", options) ?? probe.getContext("webgl", options);
     if (!context) return;
+    let renderer = String(context.getParameter(context.RENDERER) ?? "");
+    if (/^webkit webgl$/i.test(renderer)) {
+      // Chrome/Safari mask RENDERER; Firefox already returns the real (sanitised) name.
+      const debug = context.getExtension("WEBGL_debug_renderer_info");
+      if (debug) renderer = String(context.getParameter(debug.UNMASKED_RENDERER_WEBGL) ?? "");
+    }
     context.getExtension("WEBGL_lose_context")?.loseContext();
+    if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer)) return;
     const enable = () => setEnabled(true);
     if ("requestIdleCallback" in window) {
       const id = window.requestIdleCallback(enable, { timeout: 1200 });
