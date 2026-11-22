@@ -15,7 +15,8 @@
   /* Elements animated in by GSAP start hidden — but only when JS runs and motion
      is allowed. A delayed fallback reveals them if a script ever fails. */
   @media (prefers-reduced-motion: no-preference) {
-    .js [data-reveal] {
+    .js [data-reveal],
+    .js [data-alogo-pending] {
       visibility: hidden;
       animation: reveal-fallback 0s linear 3s forwards;
     }
@@ -256,7 +257,7 @@
   }
 
   /* Full-page intro (components/motion/page-loader.tsx). Shown only when JS runs and
-     motion is allowed; a 7 s fallback removes it if a script ever fails. */
+     motion is allowed; a 9 s fallback removes it if a script ever fails (the intro + exit take about 6 s). */
   .page-loader {
     display: none;
   }
@@ -266,7 +267,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      animation: loader-fallback 0s linear 7s forwards;
+      animation: loader-fallback 0s linear 9s forwards;
     }
   }
   @keyframes loader-fallback {
@@ -285,9 +286,14 @@
       radial-gradient(circle at 100% 0%, rgb(74 31 44 / 0.85) 0, transparent 60vmax),
       linear-gradient(180deg, #1d0e13 0%, var(--night) 100%);
   }
-  .page-loader-logo,
-  .page-loader-meta {
+  .page-loader-logo {
     opacity: 0;
+  }
+  /* Exit: the page opens from the centre outward through a soft-edged circle (--iris is animated). */
+  .page-loader-exit {
+    --iris: 0vmax;
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent calc(var(--iris) - 16vmax), #000 var(--iris));
+    mask-image: radial-gradient(circle at 50% 50%, transparent calc(var(--iris) - 16vmax), #000 var(--iris));
   }
   /* Twinkling CSS gold dust (components/motion/gold-dust.tsx). */
   .dust {
