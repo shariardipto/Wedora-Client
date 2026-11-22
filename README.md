@@ -69,12 +69,14 @@ npm run dev                  # http://localhost:3000
 | `npm run typecheck` | Generate route types and type-check       |
 | `npm test`          | Run unit tests                            |
 | `npm run seed:admin`| Create or repair the admin account from `ADMIN_*` env values |
+| `npm run seed:demo` | Add demo vendors, services and bookings (idempotent; `-- --reset` removes them) |
 
 ### First-time setup
 
 1. Fill in `.env.local` (MongoDB, Better Auth secret, Google OAuth, ImgBB, admin credentials).
 2. In the server repository run `npm run db:setup` once to create indexes.
 3. Run `npm run seed:admin` to create the admin account (admins can't sign up publicly).
+4. Optional: `npm run seed:demo` adds 6 demo vendors with 11 approved services (one or more per category), 2 services waiting for review and a demo customer with booking requests. Photos are copied to ImgBB. Demo records are marked `isDemo` and can be removed with `npm run seed:demo -- --reset`.
 
 ## Environment Variables
 
@@ -83,7 +85,7 @@ See [.env.example](.env.example). Secrets live only in `.env.local` locally and 
 ## Credits
 
 - Logo: original Wedora artwork by the project owner (`src/assets/brand`).
-- Photography: [Unsplash](https://unsplash.com) contributors, used under the [Unsplash License](https://unsplash.com/license) and self-hosted in `src/assets/images`.
+- Photography: [Unsplash](https://unsplash.com) contributors, used under the [Unsplash License](https://unsplash.com/license). Site images are self-hosted in `src/assets/images`; demo listing photos are copied to ImgBB by the seed script.
 - Fonts: Cormorant Garamond and Manrope via Google Fonts (SIL Open Font License).
 
 ## Links
