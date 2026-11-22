@@ -161,9 +161,8 @@ export function SiteHeader() {
           <div className="flex items-center gap-1">
             <div className="hidden items-center gap-1.5 md:flex">
               {isPending ? (
-                <div className="flex items-center gap-2.5 pr-2" aria-hidden="true">
-                  <Skeleton className="size-9 rounded-full" />
-                  <Skeleton className="h-4 w-24" />
+                <div className="p-0.5" aria-hidden="true">
+                  <Skeleton className="size-10 rounded-full" />
                 </div>
               ) : user ? (
                 <UserMenu user={user} />

@@ -56,7 +56,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="flex min-h-svh flex-col">
         <MotionProvider>{children}</MotionProvider>
-        <Toaster position="top-center" richColors closeButton />
+        {/* Bottom-right keeps toasts clear of the floating navbar pill (full-width at the bottom on phones). */}
+        <Toaster position="bottom-right" richColors closeButton />
       </body>
     </html>
   );
