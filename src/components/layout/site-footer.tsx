@@ -77,7 +77,7 @@ export function SiteFooter() {
         Site footer
       </h2>
 
-      <div className="container-page grid gap-10 py-12 sm:py-14 lg:grid-cols-12 lg:gap-8 lg:py-16">
+      <div className="container-page grid grid-cols-1 gap-10 py-12 sm:py-14 lg:grid-cols-12 lg:gap-8 lg:py-16">
         {/* Brand — centered on phones and tablets, a left-aligned column on desktop */}
         <div className="flex flex-col items-center text-center lg:col-span-4 lg:items-start lg:pr-6 lg:text-left">
           <div className="flex flex-col items-center lg:items-start">

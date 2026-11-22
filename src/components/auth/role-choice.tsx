@@ -43,7 +43,7 @@ export function RoleChoice({ value, onChange, disabled, invalid, name, ...aria }
       onValueChange={(next) => onChange(next as SelfServiceRole)}
       disabled={disabled}
       aria-invalid={invalid || undefined}
-      className="grid gap-3 sm:grid-cols-2"
+      className="grid grid-cols-1 gap-3 sm:grid-cols-2"
       {...aria}
     >
       {OPTIONS.map(({ value: option, title, description, icon: Icon }) => {

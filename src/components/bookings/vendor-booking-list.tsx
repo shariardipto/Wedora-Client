@@ -133,7 +133,7 @@ export function VendorBookingList({ bookings }: { bookings: Booking[] }) {
 
   return (
     <>
-      <ul className="grid gap-4 xl:grid-cols-2">
+      <ul className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         {bookings.map((booking) => (
           <RequestCard key={booking.id} booking={booking} onReject={setRejecting} />
         ))}

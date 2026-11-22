@@ -36,7 +36,7 @@ export function AdminServiceFilters({ query }: { query: AdminServiceQuery }) {
   }, [q]);
 
   return (
-    <div className="grid gap-3 rounded-2xl bg-card p-4 ring-1 ring-border md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center" role="search">
+    <div className="grid grid-cols-1 gap-3 rounded-2xl bg-card p-4 ring-1 ring-border md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center" role="search">
       <label className="relative block">
         <span className="sr-only">Search services or vendors</span>
         <SearchIcon className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />

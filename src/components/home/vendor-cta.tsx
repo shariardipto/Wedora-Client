@@ -25,7 +25,7 @@ export function VendorCta() {
           >
             <BrandLogo variant="white" alt="" height={384} className="h-72 sm:h-96" />
           </div>
-          <div className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
             <div>
               <p className="text-xs font-semibold tracking-[0.24em] text-gold-light uppercase">
                 For wedding professionals

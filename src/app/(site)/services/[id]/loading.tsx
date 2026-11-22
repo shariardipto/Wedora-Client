@@ -4,7 +4,7 @@ export default function ServiceDetailsLoading() {
   return (
     <div className="container-page py-8 sm:py-12" role="status" aria-label="Loading service">
       <Skeleton className="h-4 w-40" />
-      <div className="mt-6 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-14">
+      <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-14">
         <Skeleton className="aspect-[4/3] rounded-2xl" />
         <div className="space-y-4">
           <Skeleton className="h-6 w-32 rounded-full" />

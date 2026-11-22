@@ -50,7 +50,7 @@ export async function CategoryGrid() {
 
         <Stagger
           as="ul"
-          className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"
+          className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"
         >
           {SERVICE_CATEGORIES.map((category) => (
             <StaggerItem as="li" key={category.slug}>

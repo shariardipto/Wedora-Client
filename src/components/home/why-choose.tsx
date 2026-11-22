@@ -39,7 +39,7 @@ export function WhyChoose() {
       aria-labelledby="why-title"
       className="section-y overflow-hidden bg-card"
     >
-      <div className="container-page grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+      <div className="container-page grid grid-cols-1 items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <Reveal className="relative mx-auto w-full max-w-md lg:max-w-none">
           {/* Arch-framed main photo — a nod to ceremony arches. */}
           <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-3xl shadow-xl ring-1 ring-black/5">
@@ -82,7 +82,7 @@ export function WhyChoose() {
             description="Wedding planning has a hundred moving parts. Wedora brings the vendors you need into one trusted, organized space."
           />
 
-          <Stagger as="ul" className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+          <Stagger as="ul" className="mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
             {benefits.map(({ icon: Icon, title, body }) => (
               <StaggerItem as="li" key={title} className="flex gap-4">
                 <span className="grid size-12 shrink-0 place-items-center rounded-full bg-secondary text-primary">

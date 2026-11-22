@@ -56,7 +56,7 @@ export function BrowseFilters({ query }: { query: BrowseQuery }) {
 
   return (
     <div className="rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border sm:p-5" role="search" aria-label="Filter services">
-      <div className="grid gap-3 md:grid-cols-[1.6fr_1fr_1fr_1fr] md:items-center">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-[1.6fr_1fr_1fr_1fr] md:items-center">
         <label className="relative block">
           <span className="sr-only">Search services</span>
           <SearchIcon className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />

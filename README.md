@@ -22,6 +22,8 @@ Web client for **Wedora**, a wedding planning platform where customers discover 
 - **Booking requests:** customers request a date from the service details page (event date, location, message); duplicates for the same date are refused
 - **My Bookings (customers):** status tabs with counts, booking details, cancel pending requests
 - **Booking Requests (vendors):** customer contact details and message, accept or reject each pending request once
+- **Dashboard overviews with statistics:** customers (total, pending, accepted, rejected requests + recent requests), vendors (total and active services, pending requests, accepted bookings, current plan + requests waiting), admins (users, vendors, customers, services, pending services, transactions + review queue)
+- **Admin Manage Users:** search by name or email, filter by role and status, view details and activity, block (signs the user out immediately) and unblock; admin accounts are protected
 - Role-based dashboard sidebar
 - Short-lived JWTs for calling the Wedora API
 - Scroll-triggered Motion animations that respect the visitor's reduced-motion setting

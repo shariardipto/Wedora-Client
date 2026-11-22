@@ -43,7 +43,7 @@ export function HowItWorks() {
         <Stagger
           as="ol"
           gap={0.12}
-          className="relative mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8"
+          className="relative mt-16 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8"
         >
           {/* Connecting line behind the step badges on large screens. */}
           <span

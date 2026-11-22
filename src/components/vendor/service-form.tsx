@@ -165,7 +165,7 @@ export function ServiceForm({ mode, service, limitReached }: ServiceFormProps) {
               <FieldError errors={[errors.serviceName]} />
             </Field>
 
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <Field data-invalid={!!errors.category}>
                 <FieldLabel htmlFor="service-category">Category</FieldLabel>
                 <Controller
