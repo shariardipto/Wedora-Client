@@ -25,3 +25,8 @@ export function formatEventDate(dateOnly: string): string {
     timeZone: "UTC",
   }).format(new Date(`${dateOnly}T00:00:00Z`));
 }
+
+/** Stripe amounts are in the smallest unit (cents): 2900 → "$29.00". */
+export function formatMoney(cents: number, currency = "usd"): string {
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: currency.toUpperCase() }).format(cents / 100);
+}

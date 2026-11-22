@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -132,8 +133,11 @@ export function ServiceForm({ mode, service, limitReached }: ServiceFormProps) {
         <Alert>
           <InfoIcon />
           <AlertDescription>
-            You already have 3 active services — the Free plan limit. Pause or delete a service, or
-            upgrade to Premium for unlimited services, before adding another.
+            You already have 3 active services — the Free plan limit. Pause or delete a service, or{" "}
+            <Link href="/dashboard/vendor/subscription" className="font-medium text-primary underline-offset-4 hover:underline">
+              upgrade to Premium
+            </Link>{" "}
+            for unlimited services, before adding another.
           </AlertDescription>
         </Alert>
       )}

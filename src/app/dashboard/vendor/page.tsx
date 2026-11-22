@@ -78,10 +78,11 @@ export default async function VendorDashboardPage() {
           value={plan.isPremium ? "Premium" : "Free"}
           icon={CrownIcon}
           tone="gold"
+          href="/dashboard/vendor/subscription"
           hint={
             plan.isPremium && plan.expiresAt
               ? `${plan.cancelAtPeriodEnd ? "Ends" : "Renews"} ${formatDate(plan.expiresAt, "short")}`
-              : "Up to 3 active services"
+              : "Up to 3 active services · upgrade anytime"
           }
         />
       </section>
@@ -127,7 +128,11 @@ export default async function VendorDashboardPage() {
           </div>
           {atLimit && (
             <p className="mt-3 text-xs text-muted-foreground">
-              You’ve reached the Free plan’s 3 active services. Upgrade to Premium for unlimited services.
+              You’ve reached the Free plan’s 3 active services.{" "}
+              <Link href="/dashboard/vendor/subscription" className="font-medium text-primary hover:underline">
+                Upgrade to Premium
+              </Link>{" "}
+              for unlimited services.
             </p>
           )}
         </OverviewPanel>

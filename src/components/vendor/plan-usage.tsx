@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CrownIcon } from "lucide-react";
 import type { VendorServicesMeta } from "@/lib/services/types";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,22 @@ export function PlanUsage({ meta }: { meta: VendorServicesMeta }) {
           <span className="font-semibold">Free plan</span> · {meta.activeCount} of {meta.activeLimit} active services
         </p>
         <p className="text-muted-foreground">
-          {full ? "Limit reached — upgrade to Premium for unlimited services." : "Pending and approved services that are available count."}
+          {full ? (
+            <>
+              Limit reached —{" "}
+              <Link href="/dashboard/vendor/subscription" className="font-medium text-primary hover:underline">
+                upgrade to Premium
+              </Link>{" "}
+              for unlimited services.
+            </>
+          ) : (
+            <>
+              Pending and approved services that are available count.{" "}
+              <Link href="/dashboard/vendor/subscription" className="font-medium text-primary hover:underline">
+                See plans
+              </Link>
+            </>
+          )}
         </p>
       </div>
       <div
