@@ -5,6 +5,8 @@ import { MotionProvider } from "@/components/motion/motion-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
+// Plain CSS (no Tailwind directives), imported here so Turbopack tracks it directly.
+import "./effects.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -45,8 +47,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={cn("h-full antialiased", manrope.variable, cormorant.variable)}
+      // The inline script below adds "js" before hydration.
+      suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col">
+      <head>
+        {/* Lets CSS hide GSAP-animated elements only when scripts actually run (no flash, no-JS safe). */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
+      <body className="flex min-h-svh flex-col">
         <MotionProvider>{children}</MotionProvider>
         <Toaster position="top-center" richColors closeButton />
       </body>

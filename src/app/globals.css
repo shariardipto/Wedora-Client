@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./shadcn-utilities.css";
+@import "lenis/dist/lenis.css";
 
 /* ------------------------------------------------------------------
    Wedora design tokens — "Ivory & Champagne"
@@ -114,6 +115,12 @@
   }
   html {
     @apply scroll-smooth font-sans;
+    /* Hide the page scrollbar (scrolling still works everywhere); the navbar's gold
+       line shows reading progress. Inner scroll areas keep their scrollbars. */
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
   }
   body {
     @apply bg-background text-foreground;
