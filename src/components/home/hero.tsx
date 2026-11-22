@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Button } from "@/components/ui/button";
-import { MOTION_OK, gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { MOTION_OK, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 import { afterIntro } from "@/lib/intro";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/images/hero-couple.jpg";
@@ -97,10 +97,39 @@ export function Hero() {
           .from(q("[data-hero-chip]"), { y: 24, scale: 0.85, autoAlpha: 0, duration: 0.8, stagger: 0.14, ease: "back.out(1.6)" }, 1.1)
           .from(q("[data-scroll-cue]"), { autoAlpha: 0, y: -8, duration: 0.8 }, 1.4);
 
-        // Gentle idle float on the glass chips.
-        q("[data-hero-chip]").forEach((chip, index) =>
-          gsap.to(chip, { y: -10, duration: 2.6, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 1.9 + index * 0.7 }),
-        );
+        // Idle "wander" on the glass chips: each drifts to a random nearby point (a few px in any
+        // direction, a slight tilt) at a random pace, then picks a new one, so the two never move
+        // in step or in a fixed rhythm. Starts only after their entrance (which also animates `y`)
+        // and pauses while the hero is off-screen.
+        const chips = q("[data-hero-chip]");
+        const wanders: (gsap.core.Tween | undefined)[] = [];
+        let stopped = false;
+        let onScreen = true;
+        const wander = (index: number) => {
+          if (stopped) return;
+          wanders[index] = gsap.to(chips[index], {
+            x: gsap.utils.random(-7, 7),
+            y: gsap.utils.random(-6, 6),
+            rotation: gsap.utils.random(-1.2, 1.2),
+            duration: gsap.utils.random(2.6, 4.4),
+            ease: "sine.inOut",
+            paused: !onScreen,
+            onComplete: () => wander(index),
+          });
+        };
+        tl.call(() => chips.forEach((_, index) => gsap.delayedCall(index * 0.9, () => wander(index))), [], ">");
+        ScrollTrigger.create({
+          trigger: root.current,
+          start: "top bottom",
+          end: "bottom top",
+          onToggle: (self) => {
+            onScreen = self.isActive;
+            for (const tween of wanders) {
+              if (onScreen) tween?.resume();
+              else tween?.pause();
+            }
+          },
+        });
 
         // Scroll-out: copy drifts up and fades, the photo sinks a little (parallax depth).
         const scrub = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
@@ -112,6 +141,9 @@ export function Hero() {
         return () => {
           cancelIntroWait();
           split?.revert();
+          // Wander tweens are created after this context ran, so stop them explicitly.
+          stopped = true;
+          wanders.forEach((tween) => tween?.kill());
         };
       });
       mm.add("(prefers-reduced-motion: reduce)", () => {
