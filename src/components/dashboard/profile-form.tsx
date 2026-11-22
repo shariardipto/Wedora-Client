@@ -114,6 +114,7 @@ export function ProfileForm({ user }: { user: ProfileUser }) {
             onRemoveCurrent={() => setCurrentImage(null)}
             name={name}
             disabled={busy}
+            uploading={stage === "uploading"}
             error={avatarError ?? undefined}
             onError={setAvatarError}
           />
