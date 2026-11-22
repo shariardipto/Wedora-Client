@@ -24,7 +24,7 @@ export default async function DashboardLayout({ children }: LayoutProps<"/dashbo
     <>
       <SiteHeader />
       <div className="flex flex-1 flex-col bg-muted/40">
-        <div className="container-page grid flex-1 gap-6 py-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-10 lg:py-10">
+        <div className="container-page grid flex-1 grid-cols-[minmax(0,1fr)] gap-6 py-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-10 lg:py-10">
           <DashboardNav role={role} />
           <main id="main-content" className="min-w-0">
             {children}

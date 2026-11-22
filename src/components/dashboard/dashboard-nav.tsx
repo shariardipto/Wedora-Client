@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  CalendarCheckIcon,
+  CalendarHeartIcon,
   LayoutDashboardIcon,
   ListChecksIcon,
   PlusCircleIcon,
@@ -14,16 +16,18 @@ import { cn } from "@/lib/utils";
 
 type NavItem = { href: string; label: string; icon: LucideIcon };
 
-/** Role-based dashboard navigation (later phases add bookings, users, billing). */
+/** Role-based dashboard navigation (later phases add users and billing). */
 export const DASHBOARD_NAV: Record<"customer" | "vendor" | "admin", NavItem[]> = {
   customer: [
     { href: "/dashboard/customer", label: "Overview", icon: LayoutDashboardIcon },
+    { href: "/dashboard/customer/bookings", label: "My Bookings", icon: CalendarHeartIcon },
     { href: "/dashboard/profile", label: "Profile Settings", icon: UserCogIcon },
   ],
   vendor: [
     { href: "/dashboard/vendor", label: "Overview", icon: LayoutDashboardIcon },
     { href: "/dashboard/vendor/services", label: "My Services", icon: StoreIcon },
     { href: "/dashboard/vendor/services/new", label: "Add Service", icon: PlusCircleIcon },
+    { href: "/dashboard/vendor/bookings", label: "Booking Requests", icon: CalendarCheckIcon },
     { href: "/dashboard/profile", label: "Profile Settings", icon: UserCogIcon },
   ],
   admin: [
@@ -48,7 +52,7 @@ export function DashboardNav({ role }: { role: keyof typeof DASHBOARD_NAV }) {
   const active = activeHref(items, pathname);
 
   return (
-    <aside className="lg:sticky lg:top-24 lg:self-start">
+    <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
       <p className="mb-3 hidden px-3 text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase lg:block">
         {ROLE_TITLE[role]} dashboard
       </p>
