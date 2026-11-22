@@ -70,6 +70,8 @@ async function Results({ query }: { query: BrowseQuery }) {
 
   return (
     <div className="space-y-8">
+      {/* Keeps headings in order (h1 → h2 → card h3) for screen-reader navigation. */}
+      <h2 className="sr-only">Results</h2>
       <p className="text-sm text-muted-foreground" aria-live="polite">
         Showing <span className="font-medium text-foreground">{start}–{end}</span> of{" "}
         <span className="font-medium text-foreground">{meta.total}</span> service{meta.total === 1 ? "" : "s"}

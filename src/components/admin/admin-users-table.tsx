@@ -34,7 +34,7 @@ function RoleBadge({ role }: { role: AdminUser["role"] }) {
       className={cn(
         "border-0",
         role === "admin" && "bg-primary text-primary-foreground hover:bg-primary",
-        role === "vendor" && "bg-accent text-gold-strong hover:bg-accent",
+        role === "vendor" && "bg-accent text-gold-ink hover:bg-accent",
         role === "customer" && "bg-secondary text-secondary-foreground hover:bg-secondary",
       )}
     >

@@ -36,9 +36,12 @@ export function UserMenu({ user }: { user: MenuUser }) {
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         className="flex items-center gap-2.5 rounded-full py-1 pr-3 pl-1 transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none data-[state=open]:bg-muted"
-        aria-label={`Account menu for ${user.name}`}
       >
-        <UserAvatar name={user.name} image={user.image} />
+        {/* The accessible name comes from the content, so it always includes the visible name (WCAG 2.5.3). */}
+        <span className="sr-only">Account menu for </span>
+        <span aria-hidden="true">
+          <UserAvatar name={user.name} image={user.image} />
+        </span>
         <span className="max-w-32 truncate text-sm font-medium">{user.name}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={8} className="w-64">

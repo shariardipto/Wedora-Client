@@ -31,6 +31,7 @@
   /* Brand extras */
   --gold: #b8925a; /* decorative: icons, rules, large display text */
   --gold-strong: #8c6a3b; /* gold for small text — 4.9:1 on ivory */
+  --gold-ink: #7d5e33; /* gold for small text on the champagne accent — 4.9:1 on #f1e7d8 */
   --gold-light: #dcbf8e; /* gold for small text on wine/night — 5.9:1 on wine */
   --wine-deep: #4a1f2c;
   --night: #241a1d; /* footer / dark bands */
@@ -78,6 +79,7 @@
   --color-ring: var(--ring);
   --color-gold: var(--gold);
   --color-gold-strong: var(--gold-strong);
+  --color-gold-ink: var(--gold-ink);
   --color-gold-light: var(--gold-light);
   --color-wine-deep: var(--wine-deep);
   --color-night: var(--night);

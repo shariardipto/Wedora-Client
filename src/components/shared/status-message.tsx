@@ -26,7 +26,7 @@ export function StatusMessage({
     >
       <BrandLogo centered height={96} className="h-20 sm:h-24" />
       {code && (
-        <p className="mt-6 font-display text-7xl leading-none font-semibold text-gold sm:text-8xl">
+        <p className="mt-6 font-display text-7xl leading-none font-semibold text-gold-strong sm:text-8xl">
           {code}
         </p>
       )}

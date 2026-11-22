@@ -79,10 +79,10 @@ export function ServiceCardSkeleton() {
   );
 }
 
+export const SERVICE_GRID_CLASS = "grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
+
 export function ServiceGrid({ children }: { children: React.ReactNode }) {
-  return (
-    <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{children}</ul>
-  );
+  return <ul className={SERVICE_GRID_CLASS}>{children}</ul>;
 }
 
 export function ServiceGridSkeleton({ count = 8, label = "Loading services" }: { count?: number; label?: string }) {

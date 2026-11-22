@@ -71,7 +71,7 @@ export function PlanCards({ current, premiumAction }: { current: "free" | "premi
                 <Badge className="border-0 bg-primary text-primary-foreground">Current plan</Badge>
               ) : (
                 premium && (
-                  <Badge className="border-0 bg-accent text-gold-strong">
+                  <Badge className="border-0 bg-accent text-gold-ink">
                     <SparklesIcon data-icon="inline-start" aria-hidden="true" />
                     Upgrade
                   </Badge>

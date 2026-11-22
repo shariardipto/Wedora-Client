@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowRightIcon, SparklesIcon } from "lucide-react";
-import { ServiceCard, ServiceGrid, ServiceGridSkeleton } from "@/components/services/service-card";
+import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { SERVICE_GRID_CLASS, ServiceCard, ServiceGridSkeleton } from "@/components/services/service-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { serverApi } from "@/lib/api-server";
@@ -28,14 +29,15 @@ async function FeaturedList() {
     );
   }
 
+  // Same grid as Browse, with the cards fading in one after another.
   return (
-    <ServiceGrid>
+    <Stagger as="ul" gap={0.07} className={SERVICE_GRID_CLASS}>
       {services.map((service) => (
-        <li key={service.id}>
+        <StaggerItem as="li" key={service.id}>
           <ServiceCard service={service} />
-        </li>
+        </StaggerItem>
       ))}
-    </ServiceGrid>
+    </Stagger>
   );
 }
 
