@@ -10,13 +10,14 @@ import {
   PlusCircleIcon,
   StoreIcon,
   UserCogIcon,
+  UsersIcon,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type NavItem = { href: string; label: string; icon: LucideIcon };
 
-/** Role-based dashboard navigation (later phases add users and billing). */
+/** Role-based dashboard navigation (P6 adds subscription and transactions). */
 export const DASHBOARD_NAV: Record<"customer" | "vendor" | "admin", NavItem[]> = {
   customer: [
     { href: "/dashboard/customer", label: "Overview", icon: LayoutDashboardIcon },
@@ -32,6 +33,7 @@ export const DASHBOARD_NAV: Record<"customer" | "vendor" | "admin", NavItem[]> =
   ],
   admin: [
     { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboardIcon },
+    { href: "/dashboard/admin/users", label: "Manage Users", icon: UsersIcon },
     { href: "/dashboard/admin/services", label: "Manage Services", icon: ListChecksIcon },
     { href: "/dashboard/profile", label: "Profile Settings", icon: UserCogIcon },
   ],
