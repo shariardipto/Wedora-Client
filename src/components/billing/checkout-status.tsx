@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { AlertTriangleIcon, CrownIcon, HourglassIcon, RefreshCwIcon, SearchXIcon } from "lucide-react";
+import { FallingPetals } from "@/components/motion/falling-petals";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { ApiError, apiRequest } from "@/lib/api-client";
@@ -85,7 +86,7 @@ export function CheckoutStatus({ sessionId }: { sessionId: string }) {
   return (
     <section className="container-page flex flex-1 items-center justify-center py-16 sm:py-24">
       <div
-        className="w-full max-w-lg rounded-3xl bg-card px-6 py-10 text-center shadow-sm ring-1 ring-border sm:px-10"
+        className="relative isolate w-full max-w-lg overflow-hidden rounded-3xl bg-card px-6 py-10 text-center shadow-sm ring-1 ring-border sm:px-10"
         aria-live="polite"
         aria-busy={phase === "checking"}
       >
@@ -104,6 +105,7 @@ export function CheckoutStatus({ sessionId }: { sessionId: string }) {
 
         {phase === "active" && (
           <>
+            <FallingPetals count={14} className="-z-10" />
             <motion.span
               initial={{ scale: 0.4, opacity: 0, rotate: -12 }}
               animate={{ scale: 1, opacity: 1, rotate: 0 }}

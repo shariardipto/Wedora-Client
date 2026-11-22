@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { CircleAlertIcon, SearchXIcon } from "lucide-react";
 import { BrowseFilters } from "@/components/services/browse-filters";
+import { PageIntro } from "@/components/motion/page-intro";
 import { ServiceCard, ServiceGrid, ServiceGridSkeleton } from "@/components/services/service-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { PaginationNav } from "@/components/shared/pagination-nav";
@@ -101,16 +102,12 @@ export default async function BrowseServicesPage({ searchParams }: PageProps<"/s
 
   return (
     <div className="container-page section-y pt-10! sm:pt-14!">
-      <header className="max-w-2xl">
-        <p className="eyebrow">Browse services</p>
-        <h1 className="mt-3 text-4xl font-semibold sm:text-5xl">
-          {categoryName ?? "Find your wedding team"}
-        </h1>
-        <p className="mt-3 text-base leading-7 text-muted-foreground">
-          Every listing is reviewed by our team. Search by name, filter by category or location,
-          and sort by price.
-        </p>
-      </header>
+      <PageIntro
+        key={categoryName ?? "all"}
+        eyebrow="Browse services"
+        title={categoryName ?? "Find your wedding team"}
+        description="Every listing is reviewed by our team. Search by name, filter by category or location, and sort by price."
+      />
 
       <div className="mt-8">
         <BrowseFilters query={query} />

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, MapPinIcon } from "lucide-react";
+import { Tilt } from "@/components/motion/tilt";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Price, PriceCaption } from "@/components/shared/price";
@@ -13,52 +14,54 @@ import { VendorBadge } from "./vendor-badge";
 export function ServiceCard({ service }: { service: Service }) {
   const href = `/services/${service.id}`;
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border transition-shadow duration-300 hover:shadow-lg">
-      <Link href={href} className="relative block aspect-[4/3] overflow-hidden bg-muted" tabIndex={-1} aria-hidden="true">
-        {service.images[0] && (
-          <Image
-            src={service.images[0]}
-            alt=""
-            fill
-            sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        )}
-        <Badge className="absolute top-3 left-3 bg-background/90 text-foreground shadow-sm backdrop-blur hover:bg-background/90">
-          {getCategoryName(service.category) ?? service.category}
-        </Badge>
-      </Link>
+    <Tilt className="h-full rounded-2xl" max={6}>
+      <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border transition-shadow duration-500 hover:shadow-[0_30px_60px_-28px_rgb(107_45_63/0.45)]">
+        <Link href={href} className="relative block aspect-[4/3] overflow-hidden bg-muted" tabIndex={-1} aria-hidden="true">
+          {service.images[0] && (
+            <Image
+              src={service.images[0]}
+              alt=""
+              fill
+              sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          )}
+          <Badge className="absolute top-3 left-3 bg-background/90 text-foreground shadow-sm backdrop-blur hover:bg-background/90">
+            {getCategoryName(service.category) ?? service.category}
+          </Badge>
+        </Link>
 
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-sans text-base leading-snug font-semibold tracking-normal">
-          <Link href={href} className="line-clamp-2 hover:text-primary focus-visible:underline focus-visible:outline-none">
-            {service.serviceName}
-          </Link>
-        </h3>
-        <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
-          <MapPinIcon className="size-3.5 shrink-0" aria-hidden="true" />
-          <span className="truncate">{service.location}</span>
-        </p>
-        <VendorBadge vendor={service.vendor} className="mt-4" />
-
-        <div className="mt-auto pt-5">
-        <div className="flex items-end justify-between gap-3 border-t pt-4">
-          <div>
-            <PriceCaption />
-            <p className="mt-1.5 text-[1.75rem] text-primary">
-              <Price variant="display" amount={service.price} />
-            </p>
-          </div>
-          <Button asChild size="sm" className="h-9 rounded-full px-4">
-            <Link href={href} aria-label={`View details for ${service.serviceName}`}>
-              View Details
-              <ArrowRightIcon data-icon="inline-end" />
+        <div className="flex flex-1 flex-col p-5">
+          <h3 className="font-sans text-base leading-snug font-semibold tracking-normal">
+            <Link href={href} className="line-clamp-2 hover:text-primary focus-visible:underline focus-visible:outline-none">
+              {service.serviceName}
             </Link>
-          </Button>
+          </h3>
+          <p className="mt-2 flex items-center gap-1.5 text-sm text-muted-foreground">
+            <MapPinIcon className="size-3.5 shrink-0" aria-hidden="true" />
+            <span className="truncate">{service.location}</span>
+          </p>
+          <VendorBadge vendor={service.vendor} className="mt-4" />
+
+          <div className="mt-auto pt-5">
+          <div className="flex items-end justify-between gap-3 border-t pt-4">
+            <div>
+              <PriceCaption />
+              <p className="mt-1.5 text-[1.75rem] text-primary">
+                <Price variant="display" amount={service.price} />
+              </p>
+            </div>
+            <Button asChild size="sm" className="h-9 rounded-full px-4">
+              <Link href={href} aria-label={`View details for ${service.serviceName}`}>
+                View Details
+                <ArrowRightIcon data-icon="inline-end" />
+              </Link>
+            </Button>
+          </div>
+          </div>
         </div>
-        </div>
-      </div>
-    </article>
+      </article>
+    </Tilt>
   );
 }
 

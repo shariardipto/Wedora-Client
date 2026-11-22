@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "lucide-react";
 import { BrandLogo } from "@/components/brand/logo";
+import { Magnetic } from "@/components/motion/magnetic";
 import { Reveal } from "@/components/motion/reveal";
 import { Price } from "@/components/shared/price";
 import { Button } from "@/components/ui/button";
@@ -15,9 +16,9 @@ const perks: React.ReactNode[] = [
 
 export function VendorCta() {
   return (
-    <section aria-labelledby="vendor-cta-title" className="section-y">
+    <section id="for-vendors" aria-labelledby="vendor-cta-title" className="section-y scroll-mt-20">
       <div className="container-page">
-        <Reveal className="relative isolate overflow-hidden rounded-3xl bg-primary px-6 py-14 text-primary-foreground sm:px-12 lg:px-16 lg:py-16">
+        <Reveal className="aurora grain relative isolate overflow-hidden rounded-3xl bg-primary px-6 py-14 text-primary-foreground shadow-[0_40px_100px_-40px_rgb(74_31_44/0.7)] sm:px-12 lg:px-16 lg:py-16">
           {/* Oversized, faint brand mark tucked into the corner as texture. */}
           <div
             aria-hidden="true"
@@ -52,19 +53,21 @@ export function VendorCta() {
                   </li>
                 ))}
               </ul>
-              <Button
-                asChild
-                size="lg"
-                className="group mt-8 h-12 rounded-full bg-background px-7 text-base text-primary hover:bg-background/90"
-              >
-                <Link href="/signup?role=vendor">
-                  Become a Vendor
-                  <ArrowRightIcon
-                    data-icon="inline-end"
-                    className="transition-transform group-hover:translate-x-0.5"
-                  />
-                </Link>
-              </Button>
+              <Magnetic className="mt-8">
+                <Button
+                  asChild
+                  size="lg"
+                  className="shine group h-12 rounded-full bg-background px-7 text-base text-primary hover:bg-background"
+                >
+                  <Link href="/signup?role=vendor">
+                    Become a Vendor
+                    <ArrowRightIcon
+                      data-icon="inline-end"
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </Link>
+                </Button>
+              </Magnetic>
             </div>
           </div>
         </Reveal>

@@ -1,5 +1,6 @@
 import { CheckCircle2Icon, PartyPopperIcon, SearchIcon, SendIcon } from "lucide-react";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { DrawLine } from "@/components/motion/scroll-effects";
 import { SectionHeading } from "./section-heading";
 
 const steps = [
@@ -46,10 +47,7 @@ export function HowItWorks() {
           className="relative mt-16 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8"
         >
           {/* Connecting line behind the step badges on large screens. */}
-          <span
-            aria-hidden="true"
-            className="absolute top-7 right-[12.5%] left-[12.5%] hidden h-px bg-gradient-to-r from-gold/0 via-gold/60 to-gold/0 lg:block"
-          />
+          <DrawLine className="absolute top-7 right-[12.5%] left-[12.5%] hidden h-px bg-gradient-to-r from-gold/0 via-gold to-gold/0 lg:block" />
           {steps.map(({ icon: Icon, title, body }, index) => (
             <StaggerItem
               as="li"

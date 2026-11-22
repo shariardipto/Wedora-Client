@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { BrandLogo } from "@/components/brand/logo";
+import { FallingPetals } from "@/components/motion/falling-petals";
 import heroImage from "@/assets/images/hero-couple.jpg";
 
 type AuthShellProps = {
@@ -28,6 +29,7 @@ export function AuthShell({ title, description, children, quote }: AuthShellProp
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/40 to-night/10"
           />
+          <FallingPetals count={10} className="-z-5" />
           <BrandLogo variant="white" height={72} className="h-16 self-start" />
           <p className="mt-6 font-display text-3xl leading-snug font-medium">
             {quote ?? "Every beautiful day begins with the right people beside you."}
