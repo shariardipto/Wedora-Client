@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import {
   CalendarCheckIcon,
   CalendarHeartIcon,
+  CreditCardIcon,
+  CrownIcon,
   LayoutDashboardIcon,
   ListChecksIcon,
   PlusCircleIcon,
@@ -17,7 +19,7 @@ import { cn } from "@/lib/utils";
 
 type NavItem = { href: string; label: string; icon: LucideIcon };
 
-/** Role-based dashboard navigation (P6 adds subscription and transactions). */
+/** Role-based dashboard navigation. */
 export const DASHBOARD_NAV: Record<"customer" | "vendor" | "admin", NavItem[]> = {
   customer: [
     { href: "/dashboard/customer", label: "Overview", icon: LayoutDashboardIcon },
@@ -29,12 +31,14 @@ export const DASHBOARD_NAV: Record<"customer" | "vendor" | "admin", NavItem[]> =
     { href: "/dashboard/vendor/services", label: "My Services", icon: StoreIcon },
     { href: "/dashboard/vendor/services/new", label: "Add Service", icon: PlusCircleIcon },
     { href: "/dashboard/vendor/bookings", label: "Booking Requests", icon: CalendarCheckIcon },
+    { href: "/dashboard/vendor/subscription", label: "Subscription", icon: CrownIcon },
     { href: "/dashboard/profile", label: "Profile Settings", icon: UserCogIcon },
   ],
   admin: [
     { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboardIcon },
     { href: "/dashboard/admin/users", label: "Manage Users", icon: UsersIcon },
     { href: "/dashboard/admin/services", label: "Manage Services", icon: ListChecksIcon },
+    { href: "/dashboard/admin/transactions", label: "Transactions", icon: CreditCardIcon },
     { href: "/dashboard/profile", label: "Profile Settings", icon: UserCogIcon },
   ],
 };

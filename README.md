@@ -2,9 +2,9 @@
 
 Web client for **Wedora**, a wedding planning platform where customers discover wedding services and request bookings, vendors publish services and manage requests, and admins moderate the platform.
 
-> Status: design system, public pages and authentication are in place. Services, bookings, full dashboards and payments are added in upcoming phases.
+> Status: public pages, authentication, services, bookings, dashboards and Stripe payments are in place. Deployment follows.
 
-## Features So Far
+## Features
 
 - Wedding-themed design system ("Ivory & Champagne"): Cormorant Garamond + Manrope, wine and champagne-gold palette
 - Sticky responsive navbar that switches instantly to a profile dropdown (name, photo, Dashboard, Profile Settings, Logout) after sign-in
@@ -24,6 +24,9 @@ Web client for **Wedora**, a wedding planning platform where customers discover 
 - **Booking Requests (vendors):** customer contact details and message, accept or reject each pending request once
 - **Dashboard overviews with statistics:** customers (total, pending, accepted, rejected requests + recent requests), vendors (total and active services, pending requests, accepted bookings, current plan + requests waiting), admins (users, vendors, customers, services, pending services, transactions + review queue)
 - **Admin Manage Users:** search by name or email, filter by role and status, view details and activity, block (signs the user out immediately) and unblock; admin accounts are protected
+- **Vendor Subscription (Stripe):** Free vs Premium plans ($29/month), Upgrade to Premium redirects to Stripe Checkout, cancel at period end or keep the subscription, payment history; test-mode card hint
+- **Payment pages:** `/payment/success` checks the payment status every 2 s for up to 30 s and only displays it. Premium is switched on by the server's verified Stripe webhook, never by the page. `/payment/cancel` confirms that nothing was charged
+- **Admin Transactions:** read-only payment ledger with vendor info, search, status filter, pagination and revenue totals
 - Role-based dashboard sidebar
 - Short-lived JWTs for calling the Wedora API
 - Scroll-triggered Motion animations that respect the visitor's reduced-motion setting

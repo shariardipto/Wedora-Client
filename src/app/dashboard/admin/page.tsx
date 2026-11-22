@@ -45,7 +45,7 @@ export default async function AdminDashboardPage() {
           href="/dashboard/admin/services?status=pending"
           hint={stats.pendingServices ? "Waiting for your review" : "Review queue is empty"}
         />
-        <StatCard label="Transactions" value={stats.totalTransactions} icon={CreditCardIcon} tone="slate" hint="Premium subscription payments" />
+        <StatCard label="Transactions" value={stats.totalTransactions} icon={CreditCardIcon} tone="slate" href="/dashboard/admin/transactions" hint="Premium subscription payments" />
       </section>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
