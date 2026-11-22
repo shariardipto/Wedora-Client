@@ -10,6 +10,7 @@ import {
   PencilIcon,
   ShieldCheckIcon,
 } from "lucide-react";
+import { BookingRequestDialog } from "@/components/bookings/booking-request-dialog";
 import { ServiceGallery } from "@/components/services/service-gallery";
 import { Price, PriceCaption } from "@/components/shared/price";
 import { VendorBadge } from "@/components/services/vendor-badge";
@@ -108,6 +109,11 @@ export default async function ServiceDetailsPage({ params }: PageProps<"/service
                       <CalendarHeartIcon className="size-4 text-gold" aria-hidden="true" />
                       Interested? Send a booking request with your date.
                     </p>
+                    <BookingRequestDialog
+                      serviceId={service.id}
+                      serviceName={service.serviceName}
+                      vendorName={service.vendor?.businessName ?? service.vendor?.name ?? "The vendor"}
+                    />
                   </div>
                 ) : (
                   <p className="text-sm text-muted-foreground">This service isn’t accepting bookings right now.</p>

@@ -11,3 +11,17 @@ export function formatDate(value: string | Date | null | undefined, style: "long
     year: "numeric",
   }).format(new Date(value));
 }
+
+/**
+ * Event dates are calendar dates ("2027-03-15"), stored as UTC midnight.
+ * Formatting in UTC keeps the same day for every visitor, in every timezone.
+ */
+export function formatEventDate(dateOnly: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${dateOnly}T00:00:00Z`));
+}
