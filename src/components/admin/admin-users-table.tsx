@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BanIcon, CrownIcon, EyeIcon, ShieldCheckIcon, UnlockIcon } from "lucide-react";
+import { BanIcon, CrownIcon, EyeIcon, MoreHorizontalIcon, ShieldCheckIcon, UnlockIcon } from "lucide-react";
 import { toast } from "sonner";
 import { UserAvatar } from "@/components/auth/user-avatar";
 import {
@@ -18,6 +18,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ApiError, apiRequest } from "@/lib/api-client";
@@ -100,15 +107,78 @@ export function AdminUsersTable({ users, currentUserId }: { users: AdminUser[]; 
     }
   }
 
+  const joined = (user: AdminUser) => (user.createdAt ? formatDate(user.createdAt, "short") : "—");
+
   return (
     <>
-      <div className="overflow-hidden rounded-2xl bg-card ring-1 ring-border">
+      {/* Phones and tablets: a compact list in one panel. Tap a row for the details; ⋯ for the actions. */}
+      <ul className="divide-y divide-border overflow-hidden rounded-2xl bg-card shadow-sm ring-1 ring-border lg:hidden" aria-label="Users">
+        {users.map((user) => {
+          const isSelf = user.id === currentUserId;
+          const canBlock = user.role !== "admin" && !isSelf;
+          return (
+            <li key={user.id} className="flex items-center gap-1 pr-2">
+              <button
+                type="button"
+                onClick={() => void openDetails(user)}
+                className="flex min-w-0 flex-1 items-center gap-3 py-3 pl-3 text-left transition-colors hover:bg-secondary/50 focus-visible:bg-secondary/60 focus-visible:outline-none sm:pl-4"
+              >
+                <UserAvatar name={user.name} image={user.image} className="size-10 shrink-0" />
+                <span className="block min-w-0 flex-1">
+                  <span className="flex min-w-0 items-center gap-1 text-sm font-medium">
+                    <span className="truncate">{user.name}</span>
+                    {user.isPremium && <CrownIcon className="size-3.5 shrink-0 text-gold" aria-label="Premium vendor" />}
+                    {isSelf && <span className="shrink-0 text-xs font-normal text-muted-foreground">(you)</span>}
+                  </span>
+                  <span className="block truncate text-xs text-muted-foreground">{user.email}</span>
+                  <span className="mt-1.5 flex flex-wrap items-center gap-1">
+                    <RoleBadge role={user.role} />
+                    <StatusBadge blocked={user.isBlocked} />
+                    <span className="ml-0.5 text-[0.7rem] text-muted-foreground">Joined {joined(user)}</span>
+                  </span>
+                </span>
+              </button>
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-9 shrink-0 rounded-full"
+                    aria-label={`Actions for ${user.name}`}
+                    disabled={busyId === user.id}
+                  >
+                    {busyId === user.id ? <Spinner /> : <MoreHorizontalIcon />}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onSelect={() => void openDetails(user)}>
+                    <EyeIcon /> View details
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {canBlock ? (
+                    <DropdownMenuItem variant={user.isBlocked ? "default" : "destructive"} onSelect={() => setConfirming(user)}>
+                      {user.isBlocked ? <UnlockIcon /> : <BanIcon />}
+                      {user.isBlocked ? "Unblock" : "Block"}
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem disabled>
+                      <ShieldCheckIcon /> Protected account
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Laptop/desktop: a table that fits its column (names and emails shorten with …, compact actions). */}
+      <div className="hidden overflow-hidden rounded-2xl bg-card ring-1 ring-border lg:block">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="min-w-64 pl-4">User</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead className="w-full pl-4">User</TableHead>
+              <TableHead>Account</TableHead>
               <TableHead>Joined</TableHead>
               <TableHead className="pr-4 text-right">
                 <span className="sr-only">Actions</span>
@@ -121,53 +191,55 @@ export function AdminUsersTable({ users, currentUserId }: { users: AdminUser[]; 
               const canBlock = user.role !== "admin" && !isSelf;
               return (
                 <TableRow key={user.id}>
-                  <TableCell className="pl-4">
+                  {/* max-w-0 + the header's w-full let this column shrink, so long text truncates instead of scrolling. */}
+                  <TableCell className="max-w-0 pl-4">
                     <div className="flex items-center gap-3">
-                      <UserAvatar name={user.name} image={user.image} className="size-9" />
-                      <div className="min-w-0">
-                        <p className="flex max-w-64 items-center gap-1 truncate font-medium">
-                          {user.name}
+                      <UserAvatar name={user.name} image={user.image} className="size-9 shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <p className="flex min-w-0 items-center gap-1 font-medium">
+                          <span className="truncate">{user.name}</span>
                           {user.isPremium && <CrownIcon className="size-3.5 shrink-0 text-gold" aria-label="Premium vendor" />}
-                          {isSelf && <span className="text-xs font-normal text-muted-foreground">(you)</span>}
+                          {isSelf && <span className="shrink-0 text-xs font-normal text-muted-foreground">(you)</span>}
                         </p>
-                        <p className="max-w-64 truncate text-xs text-muted-foreground">{user.email}</p>
+                        <p className="truncate text-xs text-muted-foreground">{user.email}</p>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <RoleBadge role={user.role} />
+                    <div className="flex flex-col items-start gap-1">
+                      <RoleBadge role={user.role} />
+                      <StatusBadge blocked={user.isBlocked} />
+                    </div>
                   </TableCell>
-                  <TableCell>
-                    <StatusBadge blocked={user.isBlocked} />
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap text-muted-foreground">
-                    {user.createdAt ? formatDate(user.createdAt, "short") : "—"}
-                  </TableCell>
+                  <TableCell className="text-xs text-muted-foreground">{joined(user)}</TableCell>
                   <TableCell className="pr-4">
                     <div className="flex items-center justify-end gap-1">
-                      <Button variant="ghost" size="sm" className="rounded-full" onClick={() => void openDetails(user)}>
-                        <EyeIcon data-icon="inline-start" /> Details
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-full"
+                        aria-label={`View details for ${user.name}`}
+                        title="View details"
+                        onClick={() => void openDetails(user)}
+                      >
+                        <EyeIcon />
                       </Button>
                       {canBlock ? (
                         <Button
                           variant="ghost"
-                          size="sm"
+                          size="icon"
                           className={cn("rounded-full", !user.isBlocked && "text-destructive hover:text-destructive")}
+                          aria-label={`${user.isBlocked ? "Unblock" : "Block"} ${user.name}`}
+                          title={user.isBlocked ? "Unblock" : "Block"}
                           disabled={busyId === user.id}
                           onClick={() => setConfirming(user)}
                         >
-                          {busyId === user.id ? (
-                            <Spinner />
-                          ) : user.isBlocked ? (
-                            <UnlockIcon data-icon="inline-start" />
-                          ) : (
-                            <BanIcon data-icon="inline-start" />
-                          )}
-                          {user.isBlocked ? "Unblock" : "Block"}
+                          {busyId === user.id ? <Spinner /> : user.isBlocked ? <UnlockIcon /> : <BanIcon />}
                         </Button>
                       ) : (
-                        <span className="inline-flex h-8 items-center gap-1 px-3 text-xs text-muted-foreground">
-                          <ShieldCheckIcon className="size-3.5" aria-hidden="true" /> Protected
+                        <span className="grid size-8 place-items-center text-muted-foreground" title="Protected account">
+                          <ShieldCheckIcon className="size-4" aria-hidden="true" />
+                          <span className="sr-only">Protected account</span>
                         </span>
                       )}
                     </div>

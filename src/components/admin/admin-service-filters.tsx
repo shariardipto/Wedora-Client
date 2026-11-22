@@ -36,8 +36,9 @@ export function AdminServiceFilters({ query }: { query: AdminServiceQuery }) {
   }, [q]);
 
   return (
-    <div className="grid grid-cols-1 gap-3 rounded-2xl bg-card p-4 ring-1 ring-border md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center" role="search">
-      <label className="relative block">
+    // Phones: search on its own row, the two filters side by side, the spinner inside the search box.
+    <div className="grid grid-cols-2 gap-3 rounded-2xl bg-card p-3 ring-1 ring-border sm:p-4 md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center" role="search">
+      <label className="relative col-span-2 block md:col-span-1">
         <span className="sr-only">Search services or vendors</span>
         <SearchIcon className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
         <Input
@@ -46,8 +47,9 @@ export function AdminServiceFilters({ query }: { query: AdminServiceQuery }) {
           onChange={(event) => setQ(event.target.value)}
           placeholder="Search service, location or vendor"
           maxLength={80}
-          className="h-11 rounded-full pl-10"
+          className="h-11 rounded-full pr-10 pl-10 md:pr-3"
         />
+        {pending && <Spinner className="absolute top-1/2 right-3.5 -translate-y-1/2 text-muted-foreground md:hidden" />}
       </label>
       <Select value={query.status ?? ALL} onValueChange={(value) => navigate({ status: value === ALL ? undefined : value })}>
         <SelectTrigger className="h-11! w-full rounded-full" aria-label="Status">
@@ -73,7 +75,7 @@ export function AdminServiceFilters({ query }: { query: AdminServiceQuery }) {
           ))}
         </SelectContent>
       </Select>
-      <span className="flex h-11 w-6 items-center justify-center" aria-live="polite">
+      <span className="hidden h-11 w-6 items-center justify-center md:flex" aria-live="polite">
         {pending && <Spinner />}
       </span>
     </div>

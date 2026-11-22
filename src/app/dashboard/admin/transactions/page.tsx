@@ -38,7 +38,7 @@ export default async function TransactionsPage({ searchParams }: PageProps<"/das
         description="Every Premium payment recorded from Stripe — first payments and monthly renewals. This ledger is read-only."
       />
 
-      <section aria-label="Payment totals" className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section aria-label="Payment totals" className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <StatCard label="Revenue" value={formatMoney(summary.revenue, summary.currency)} icon={BanknoteIcon} tone="gold" hint="All paid transactions" />
         <StatCard label="Paid" value={summary.paid} icon={CircleCheckIcon} tone="green" href={href({ status: "paid", page: 1 })} hint="Successful payments" />
         <StatCard label="Pending" value={summary.pending} icon={ClockIcon} tone="amber" href={href({ status: "pending", page: 1 })} hint="Checkouts not completed yet" />

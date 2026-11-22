@@ -92,13 +92,13 @@ type StatCardProps = {
 export function StatCard({ label, value, icon: Icon, hint, href, tone = "wine" }: StatCardProps) {
   const body = (
     <>
-      <div className="flex items-start justify-between gap-3">
-        <p className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">{label}</p>
-        <span className={cn("grid size-9 shrink-0 place-items-center rounded-full", TONES[tone])}>
-          <Icon className="size-4.5" aria-hidden="true" />
+      <div className="flex items-start justify-between gap-2 sm:gap-3">
+        <p className="text-[0.68rem] font-semibold tracking-[0.12em] text-muted-foreground uppercase sm:text-xs sm:tracking-[0.14em]">{label}</p>
+        <span className={cn("grid size-8 shrink-0 place-items-center rounded-full sm:size-9", TONES[tone])}>
+          <Icon className="size-4 sm:size-4.5" aria-hidden="true" />
         </span>
       </div>
-      <p className="mt-3 font-display text-4xl leading-none font-semibold text-foreground">{value}</p>
+      <p className="mt-3 font-display text-3xl leading-none font-semibold text-foreground sm:text-4xl">{value}</p>
       {hint && <p className="mt-2 text-xs leading-5 text-muted-foreground">{hint}</p>}
       {href && (
         <ArrowUpRightIcon
@@ -109,7 +109,7 @@ export function StatCard({ label, value, icon: Icon, hint, href, tone = "wine" }
     </>
   );
   const className =
-    "group relative flex flex-col rounded-2xl bg-card p-5 shadow-sm ring-1 ring-border transition-shadow";
+    "group relative flex flex-col rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border transition-shadow sm:p-5";
   return href ? (
     <Link
       href={href}
