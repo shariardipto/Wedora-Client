@@ -29,4 +29,6 @@ export type SocialName = (typeof siteConfig.socials)[number]["name"];
 export const mainNav = [
   { label: "Home", href: "/" },
   { label: "Browse Services", href: "/services" },
+  { label: "How It Works", href: "/#how-it-works" },
+  { label: "For Vendors", href: "/#for-vendors" },
 ] as const;

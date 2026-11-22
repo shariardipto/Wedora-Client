@@ -35,7 +35,7 @@ export function UserMenu({ user }: { user: MenuUser }) {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger
-        className="flex items-center gap-2.5 rounded-full py-1 pr-3 pl-1 transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none data-[state=open]:bg-muted"
+        className="flex items-center gap-2.5 rounded-full py-1 pr-3 pl-1 transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none data-[state=open]:bg-muted group-data-[theme=dark]/nav:text-background group-data-[theme=dark]/nav:hover:bg-white/10 group-data-[theme=dark]/nav:data-[state=open]:bg-white/10"
       >
         {/* The accessible name comes from the content, so it always includes the visible name (WCAG 2.5.3). */}
         <span className="sr-only">Account menu for </span>

@@ -29,7 +29,14 @@ Web client for **Wedora**, a wedding planning platform where customers discover 
 - **Admin Transactions:** read-only payment ledger with vendor info, search, status filter, pagination and revenue totals
 - Role-based dashboard sidebar
 - Short-lived JWTs for calling the Wedora API
-- Scroll-triggered Motion animations that respect the visitor's reduced-motion setting
+- **"Golden Hour" premium UI:**
+  - WebGL hero (Three.js + React Three Fiber): interlocked gold and rose-gold rings with a solitaire that follow the cursor and turn with scroll, drifting rose petals and twinkling gold dust.
+  - GSAP SplitText headline reveals.
+  - Lenis smooth scrolling synced with GSAP ScrollTrigger.
+  - Scroll-reactive category marquee and parallax photos.
+  - 3D tilt cards with glare, magnetic buttons, an aurora vendor band and CSS petals on sign-in and payment success.
+  - Floating glass navbar that turns dark over dark sections and light over ivory ones. It has an orbiting gold edge-light, a sliding hover indicator and a gold reading-progress line, and tucks away while you scroll down. Phones get a full-screen menu with large serif links.
+  - Everything is skipped for reduced motion, and the 3D scene only loads when WebGL is available.
 - Custom 404, error and loading states
 
 ## Technology Stack
@@ -42,7 +49,8 @@ Web client for **Wedora**, a wedding planning platform where customers discover 
 | Forms      | react-hook-form, Zod                    |
 | Images     | ImgBB (server-side upload)              |
 | Styling    | Tailwind CSS 4, shadcn/ui (Radix)       |
-| Animation  | Motion                                  |
+| Animation  | Motion, GSAP (ScrollTrigger, SplitText), Lenis |
+| 3D         | Three.js, React Three Fiber             |
 | Icons      | lucide-react                            |
 | Toasts     | Sonner                                  |
 | Testing    | Vitest                                  |
