@@ -263,11 +263,3 @@ The app is deployed on **Vercel**.
 4. On the **API** deployment:
    - `CLIENT_ORIGIN`, `BETTER_AUTH_ISSUER` and `BETTER_AUTH_AUDIENCE`: this app's URL.
    - `BETTER_AUTH_JWKS_URL`: `https://<your-domain>/api/auth/jwks`
-
-## Credits
-
-- **Logo:** original Wedora artwork by the project owner (`src/assets/brand`).
-- **Photography:** [Unsplash](https://unsplash.com) contributors, under the [Unsplash License](https://unsplash.com/license).
-  - Site images are self-hosted in `src/assets/images`.
-  - The seed script copies demo listing photos to ImgBB.
-- **Fonts:** Cormorant Garamond and Manrope from Google Fonts (SIL Open Font License).
