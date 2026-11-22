@@ -3,12 +3,18 @@ export function formatPrice(amount: number): string {
   return `$${Math.round(amount).toLocaleString("en-US")}`;
 }
 
+/**
+ * Always formatted in UTC: pages render on the server (UTC) and again in the
+ * browser (local time). A local timezone would print a different day near
+ * midnight and break hydration (React #418).
+ */
 export function formatDate(value: string | Date | null | undefined, style: "long" | "short" = "long"): string {
   if (!value) return "";
   return new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: style === "long" ? "long" : "short",
     year: "numeric",
+    timeZone: "UTC",
   }).format(new Date(value));
 }
 

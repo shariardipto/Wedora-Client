@@ -22,6 +22,8 @@ type ServerFetchOptions = {
 
 export type ApiResult<T, M = undefined> = { data: T; meta: M };
 
+const TRANSIENT_STATUSES = new Set([502, 503, 504]);
+
 /**
  * Server-side call to the Wedora API. Data is always fresh (`no-store`) so
  * approvals, edits and bookings show up immediately and reloads never 404.
@@ -43,10 +45,25 @@ export async function serverApi<T, M = undefined>(
     requestHeaders.set("Authorization", `Bearer ${token}`);
   }
 
-  let response: Response;
-  try {
-    response = await fetch(url, { headers: requestHeaders, cache: "no-store" });
-  } catch {
+  // Reads only (GET), so one retry is safe: it rides out a cold start or a
+  // momentary 502/503/504 instead of showing the error page.
+  let response: Response | undefined;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      response = await fetch(url, { headers: requestHeaders, cache: "no-store" });
+      if (attempt === 0 && TRANSIENT_STATUSES.has(response.status)) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        continue;
+      }
+      break;
+    } catch {
+      if (attempt === 1) {
+        throw new ServerApiError(503, "API_UNREACHABLE", "Wedora’s service is temporarily unreachable.");
+      }
+      await new Promise((resolve) => setTimeout(resolve, 300));
+    }
+  }
+  if (!response) {
     throw new ServerApiError(503, "API_UNREACHABLE", "Wedora’s service is temporarily unreachable.");
   }
 
