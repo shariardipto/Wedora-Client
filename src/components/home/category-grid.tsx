@@ -1,3 +1,4 @@
+import { Suspense, cache } from "react";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
 import { ArrowUpRightIcon } from "lucide-react";
@@ -28,18 +29,33 @@ const categoryImages: Record<ServiceCategorySlug, StaticImageData> = {
   fashion,
 };
 
-async function loadCounts(): Promise<Map<string, number> | null> {
+/** One request per page render, shared by all six badges. */
+const loadCounts = cache(async (): Promise<Map<string, number> | null> => {
   try {
     const { data } = await serverApi<CategoryCount[]>("/api/services/categories");
     return new Map(data.map((row) => [row.category, row.count]));
   } catch {
     return null; // counts are a nice-to-have; the section still works without them
   }
+});
+
+async function CountBadge({ slug }: { slug: ServiceCategorySlug }) {
+  const counts = await loadCounts();
+  if (!counts) return null;
+  const count = counts.get(slug) ?? 0;
+  return (
+    <span className="absolute top-4 right-4 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm">
+      {count} service{count === 1 ? "" : "s"}
+    </span>
+  );
 }
 
-/** Dynamic section 2: explore services by category (with live counts). */
-export async function CategoryGrid() {
-  const counts = await loadCounts();
+/**
+ * Dynamic section 2: explore services by category. The grid renders at once;
+ * the live counts stream into their badges, so a slow count never holds back
+ * (or later shifts) the page.
+ */
+export function CategoryGrid() {
   return (
     <section aria-labelledby="categories-title" className="section-y">
       <div className="container-page">
@@ -75,11 +91,9 @@ export async function CategoryGrid() {
                     aria-hidden="true"
                     className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/35 to-transparent"
                   />
-                  {counts && (
-                    <span className="absolute top-4 right-4 rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground shadow-sm backdrop-blur">
-                      {counts.get(category.slug) ?? 0} service{counts.get(category.slug) === 1 ? "" : "s"}
-                    </span>
-                  )}
+                  <Suspense fallback={null}>
+                    <CountBadge slug={category.slug} />
+                  </Suspense>
                   <h3 className="font-display text-2xl leading-tight font-semibold sm:text-[1.7rem]">
                     {category.name}
                   </h3>

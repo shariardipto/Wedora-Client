@@ -6,7 +6,7 @@ import { GoldDust } from "@/components/motion/gold-dust";
 import { markIntroDone } from "@/lib/intro";
 import { gsap, useGSAP } from "@/lib/gsap";
 
-const MIN_VISIBLE_MS = 1200;
+const MIN_VISIBLE_MS = 800;
 const MAX_WAIT_MS = 4000;
 
 function pageReady(): Promise<void> {
@@ -61,9 +61,9 @@ export function PageLoader() {
       // Enter: logo rises out of its mask, meta fades in, progress climbs while the page loads.
       gsap
         .timeline()
-        .fromTo(logo ?? [], { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1, ease: "power4.out" }, 0.1)
-        .fromTo(q("[data-loader-meta]"), { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.35)
-        .to(progress, { value: 86, duration: 1.1, ease: "power2.out", onUpdate: render }, 0.2);
+        .fromTo(logo ?? [], { yPercent: 110, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.8, ease: "power4.out" }, 0.05)
+        .fromTo(q("[data-loader-meta]"), { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.25)
+        .to(progress, { value: 86, duration: 0.75, ease: "power2.out", onUpdate: render }, 0.1);
 
       const minimum = new Promise<void>((resolve) => window.setTimeout(resolve, MIN_VISIBLE_MS));
       let cancelled = false;
@@ -71,8 +71,8 @@ export function PageLoader() {
         if (cancelled) return;
         const exit = gsap.timeline({ onComplete: finish });
         exit
-          .to(progress, { value: 100, duration: 0.35, ease: "power1.out", onUpdate: render, overwrite: true })
-          .to(q("[data-loader-meta]"), { autoAlpha: 0, y: -8, duration: 0.3, ease: "power2.in" }, ">-0.05");
+          .to(progress, { value: 100, duration: 0.25, ease: "power1.out", onUpdate: render, overwrite: true })
+          .to(q("[data-loader-meta]"), { autoAlpha: 0, y: -8, duration: 0.25, ease: "power2.in" }, ">-0.05");
 
         // Morph target: the floating navbar pill. The logo stays centred and fades out.
         const pill = document.querySelector<HTMLElement>("[data-site-header] .nav-pill");
@@ -86,7 +86,7 @@ export function PageLoader() {
             { clipPath: "inset(0px 0px 0px 0px round 0px)" },
             {
               clipPath: `inset(${pillRect.top}px ${vw - pillRect.right}px ${vh - pillRect.bottom}px ${pillRect.left}px round ${radius}px)`,
-              duration: 1.05,
+              duration: 0.85,
               ease: "expo.inOut",
             },
             ">-0.1",
@@ -94,7 +94,7 @@ export function PageLoader() {
           if (logo) {
             exit.to(logo, { autoAlpha: 0, scale: 0.94, duration: 0.45, ease: "power2.in" }, "<");
           }
-          exit.to(el, { autoAlpha: 0, duration: 0.35, ease: "power1.out" }, ">-0.05");
+          exit.to(el, { autoAlpha: 0, duration: 0.3, ease: "power1.out" }, ">-0.05");
         } else {
           // Navbar not on screen (e.g. restored mid-page): lift the curtain instead.
           if (logo) exit.to(logo, { autoAlpha: 0, scale: 0.94, duration: 0.45, ease: "power2.in" }, ">-0.1");

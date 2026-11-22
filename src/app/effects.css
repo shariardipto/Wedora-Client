@@ -45,8 +45,7 @@
     inset: 0;
     z-index: 30;
     pointer-events: none;
-    opacity: 0.07;
-    mix-blend-mode: overlay;
+    opacity: 0.05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
@@ -99,7 +98,7 @@
     color: var(--background);
     background: rgb(255 255 255 / 0.09);
     border: 1px solid rgb(255 255 255 / 0.18);
-    backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(10px);
     box-shadow:
       0 24px 50px -22px rgb(0 0 0 / 0.65),
       inset 0 1px 0 rgb(255 255 255 / 0.14);
@@ -110,10 +109,10 @@
     position: relative;
     transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
     transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
   }
   .tilt[data-tilting] {
     transition-duration: 0.15s;
+    will-change: transform;
   }
   .tilt-glare {
     position: absolute;
@@ -190,7 +189,7 @@
     color: var(--foreground);
     background: rgb(251 248 243 / 0.74);
     border: 1px solid rgb(43 35 38 / 0.07);
-    backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(12px);
     box-shadow: 0 12px 40px -20px rgb(43 35 38 / 0.35);
     transition:
       background-color 0.5s ease,
@@ -354,19 +353,19 @@
   }
 
   /* Soft, slowly drifting light orbs behind page headers. */
+  /* Soft glows drawn with radial gradients — no blur filter, so animating them is cheap. */
   .orb {
     position: absolute;
     z-index: -1;
     border-radius: 9999px;
     pointer-events: none;
-    filter: blur(70px);
-    opacity: 0.42;
+    opacity: 0.55;
   }
   .orb-gold {
-    background: rgb(220 191 142 / 0.65);
+    background: radial-gradient(closest-side, rgb(220 191 142 / 0.6), rgb(220 191 142 / 0.18) 55%, transparent);
   }
   .orb-blush {
-    background: rgb(232 169 168 / 0.5);
+    background: radial-gradient(closest-side, rgb(232 169 168 / 0.5), rgb(232 169 168 / 0.15) 55%, transparent);
   }
   @media (prefers-reduced-motion: no-preference) {
     .orb {
@@ -396,7 +395,7 @@
     z-index: -1;
     pointer-events: none;
     opacity: 0.6;
-    filter: blur(60px);
+    will-change: transform;
     background:
       radial-gradient(30% 35% at 30% 30%, rgb(220 191 142 / 0.55), transparent 70%),
       radial-gradient(30% 35% at 72% 65%, rgb(232 169 168 / 0.45), transparent 70%),

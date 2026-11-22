@@ -88,7 +88,7 @@ function Rings({ rootRef }: { rootRef: RootRef }) {
 
   const { torus, crown, pavilion, setting, gold, rose, gem } = useMemo(
     () => ({
-      torus: new THREE.TorusGeometry(1, 0.1, 64, 220),
+      torus: new THREE.TorusGeometry(1, 0.1, 40, 150),
       crown: new THREE.CylinderGeometry(0.13, 0.22, 0.09, 8, 1),
       pavilion: new THREE.ConeGeometry(0.22, 0.26, 8, 1),
       setting: new THREE.CylinderGeometry(0.1, 0.07, 0.1, 24),
@@ -385,7 +385,7 @@ export default function HeroScene({ rootRef, onReady }: { rootRef: RootRef; onRe
 
   return (
     <Canvas
-      dpr={[1, compact ? 1.5 : 1.75]}
+      dpr={[1, compact ? 1.25 : 1.5]}
       camera={{ position: [0, 0, 6], fov: 35, near: 0.1, far: 40 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       frameloop={active ? "always" : "never"}
@@ -400,8 +400,8 @@ export default function HeroScene({ rootRef, onReady }: { rootRef: RootRef; onRe
       <directionalLight position={[2.5, 3, 4]} intensity={1.6} color="#fff1dc" />
       <pointLight position={[-3, -1.5, 2.5]} intensity={8} distance={12} color="#c45a72" />
       <Rings rootRef={rootRef} />
-      <Petals count={compact ? 34 : 72} />
-      <GoldDust count={compact ? 90 : 190} />
+      <Petals count={compact ? 24 : 60} />
+      <GoldDust count={compact ? 70 : 160} />
     </Canvas>
   );
 }

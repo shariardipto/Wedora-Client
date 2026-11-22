@@ -32,6 +32,9 @@ function useSceneEnabled() {
   const [enabled, setEnabled] = useState(false);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Low-end devices keep the static hero (photo + gradient): smooth scrolling matters more.
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    if ((nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4) return;
     const probe = document.createElement("canvas");
     const context = probe.getContext("webgl2") ?? probe.getContext("webgl");
     if (!context) return;

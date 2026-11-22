@@ -62,7 +62,7 @@ export function FeaturedServices() {
           </Button>
         </div>
         <div className="mt-12">
-          <Suspense fallback={<ServiceGridSkeleton count={4} label="Loading featured services" />}>
+          <Suspense fallback={<ServiceGridSkeleton count={8} label="Loading featured services" />}>
             <FeaturedList />
           </Suspense>
         </div>
