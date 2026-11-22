@@ -19,6 +19,9 @@ Web client for **Wedora**, a wedding planning platform where customers discover 
 - **Home:** Featured Services from the database and live service counts per category
 - **Vendor dashboard:** My Services (approval status, rejection reasons, pause/resume, edit, delete), Add/Edit Service with 1–5 photos uploaded to ImgBB, Free-plan usage meter (3 active services)
 - **Admin dashboard:** Manage Services — search, filter by status/category, approve, reject with a reason, move back to review, delete
+- **Booking requests:** customers request a date from the service details page (event date, location, message); duplicates for the same date are refused
+- **My Bookings (customers):** status tabs with counts, booking details, cancel pending requests
+- **Booking Requests (vendors):** customer contact details and message, accept or reject each pending request once
 - Role-based dashboard sidebar
 - Short-lived JWTs for calling the Wedora API
 - Scroll-triggered Motion animations that respect the visitor's reduced-motion setting
