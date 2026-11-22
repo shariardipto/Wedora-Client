@@ -7,7 +7,7 @@ import {
   PhoneIcon,
   type LucideIcon,
 } from "lucide-react";
-import { Logo } from "@/components/brand/logo";
+import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { SocialIcon } from "@/components/brand/social-icon";
 import { siteConfig } from "@/config/site";
 import { SERVICE_CATEGORIES, categoryHref } from "@/lib/categories";
@@ -81,8 +81,15 @@ export function SiteFooter() {
         {/* Brand — centered on phones and tablets, a left-aligned column on desktop */}
         <div className="flex flex-col items-center text-center lg:col-span-4 lg:items-start lg:pr-6 lg:text-left">
           <div className="flex flex-col items-center lg:items-start">
-            {/* While centered, the logo is optically centered on its wordmark (see BrandLogo `centered`). */}
-            <Logo variant="white" imageClassName="h-16 -translate-x-[16%] lg:translate-x-0" height={64} />
+            {/* Animated logo, looping at half speed (pauses while off-screen). While centered, it is
+                optically centered on its wordmark (the flourish makes the artwork asymmetric). */}
+            <Link
+              href="/"
+              aria-label="Wedora home"
+              className="inline-flex shrink-0 items-center rounded-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+            >
+              <AnimatedLogo mode="loop" speed={0.5} className="h-16 -translate-x-[16%] lg:translate-x-0" wordClassName="fill-white" />
+            </Link>
             <p className="mt-5 max-w-xs text-sm leading-7 text-balance text-background/70 sm:max-w-md lg:max-w-sm lg:text-wrap">
               {siteConfig.description}
             </p>

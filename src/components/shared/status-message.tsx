@@ -1,4 +1,4 @@
-import { BrandLogo } from "@/components/brand/logo";
+import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { cn } from "@/lib/utils";
 
 type StatusMessageProps = {
@@ -24,7 +24,8 @@ export function StatusMessage({
         className,
       )}
     >
-      <BrandLogo centered height={96} className="h-20 sm:h-24" />
+      {/* Optically centered on its wordmark (the flourish makes the artwork asymmetric). */}
+      <AnimatedLogo mode="loop" speed={0.5} afterPageIntro className="h-20 -translate-x-[16%] sm:h-24" wordClassName="fill-primary" />
       {code && (
         <p className="mt-6 font-display text-7xl leading-none font-semibold text-gold-strong sm:text-8xl">
           {code}

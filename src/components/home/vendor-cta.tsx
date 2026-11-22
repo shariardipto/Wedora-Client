@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon } from "lucide-react";
-import { BrandLogo } from "@/components/brand/logo";
+import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Reveal } from "@/components/motion/reveal";
 import { Price } from "@/components/shared/price";
@@ -24,7 +24,7 @@ export function VendorCta() {
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 -bottom-28 -z-10 text-primary-foreground opacity-[0.08] sm:-right-16 sm:-bottom-24"
           >
-            <BrandLogo variant="white" alt="" height={384} className="h-72 sm:h-96" />
+            <AnimatedLogo mode="loop" speed={0.5} className="h-72 sm:h-96" wordClassName="fill-white" />
           </div>
           <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
             <div>

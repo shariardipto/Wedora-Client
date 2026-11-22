@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowUpRightIcon, LayoutDashboardIcon, LogOutIcon, UserCogIcon, XIcon } from "lucide-react";
-import { BrandLogo } from "@/components/brand/logo";
+import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { UserAvatar } from "@/components/auth/user-avatar";
 import { FallingPetals } from "@/components/motion/falling-petals";
 import { smoothScrollTo } from "@/components/motion/smooth-scroll";
@@ -87,7 +87,7 @@ export function MobileMenu({
 
         <div className="relative flex min-h-full flex-col px-6 pt-5 pb-8 sm:px-10">
           <div className="flex items-center justify-between">
-            <BrandLogo variant="white" height={48} className="h-10" />
+            <AnimatedLogo mode="loop" speed={0.5} afterPageIntro className="h-14 sm:h-18" wordClassName="fill-white" />
             <SheetClose asChild>
               <button
                 type="button"

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
-import { BrandLogo } from "@/components/brand/logo";
+import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { UserMenu } from "@/components/auth/user-menu";
 import { useSignOut } from "@/components/auth/use-sign-out";
 import { Magnetic } from "@/components/motion/magnetic";
@@ -104,19 +104,19 @@ export function SiteHeader() {
           ref={pill}
           className="nav-pill pointer-events-auto relative flex h-14 items-center justify-between gap-3 rounded-full pr-1.5 pl-4 md:h-[3.75rem] md:pr-2 md:pl-5"
         >
-          {/* Logo: coloured on light sections, white on dark ones (crossfade). */}
+          {/* Animated logo, looping at half speed (starts after the intro). The wordmark is wine on
+              light sections and white on dark ones. */}
           <Link
             href="/"
             aria-label="Wedora home"
             className="relative inline-flex shrink-0 items-center rounded-full focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
           >
-            <BrandLogo eager height={48} className="h-10 transition-opacity duration-500 group-data-[theme=dark]/nav:opacity-0 md:h-11" />
-            <BrandLogo
-              eager
-              variant="white"
-              alt=""
-              height={48}
-              className="absolute left-0 h-10 opacity-0 transition-opacity duration-500 group-data-[theme=dark]/nav:opacity-100 md:h-11"
+            <AnimatedLogo
+              mode="loop"
+              speed={0.5}
+              afterPageIntro
+              className="h-10 md:h-11"
+              wordClassName="fill-primary group-data-[theme=dark]/nav:fill-white"
             />
           </Link>
 
