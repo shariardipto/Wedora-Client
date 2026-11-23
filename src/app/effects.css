@@ -492,6 +492,33 @@
       transform: rotate(360deg);
     }
   }
+  /* Back-to-top seal: on hover (or keyboard focus) the arrow lifts out through the top of its gold
+     circle and glides back in from below, ending exactly where it started, so nothing is left
+     off-centre in the ring. */
+  @media (prefers-reduced-motion: no-preference) {
+    .group:hover .footer-seal-arrow,
+    .group:focus-within .footer-seal-arrow {
+      animation: seal-arrow 0.75s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+  }
+  @keyframes seal-arrow {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    45% {
+      transform: translateY(-170%);
+      opacity: 0;
+    }
+    46% {
+      transform: translateY(170%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 
   /* Slowly rotating aurora behind the vendor band. */
   .aurora {

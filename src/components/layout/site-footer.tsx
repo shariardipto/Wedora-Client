@@ -100,8 +100,10 @@ function BackToTop({ className }: { className?: string }) {
         href="#main-content"
         className="grid size-full place-items-center rounded-full bg-night ring-1 ring-gold/30 transition-shadow duration-500 hover:shadow-[0_0_44px_-6px_rgb(220_191_142/0.55)] focus-visible:ring-3 focus-visible:ring-gold/60 focus-visible:outline-none"
       >
-        <span className="grid size-10 place-items-center rounded-full bg-gold-light text-night shadow-[0_8px_24px_-8px_rgb(220_191_142/0.8)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1">
-          <ArrowUpIcon className="size-4" aria-hidden="true" />
+        {/* The circle stays centred in the ring (it only grows a touch); the arrow does the lifting,
+            inside it (see .footer-seal-arrow). */}
+        <span className="grid size-10 place-items-center overflow-hidden rounded-full bg-gold-light text-night shadow-[0_8px_24px_-8px_rgb(220_191_142/0.8)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110">
+          <ArrowUpIcon className="footer-seal-arrow size-4" aria-hidden="true" />
         </span>
         <span className="sr-only">Back to top</span>
       </a>
