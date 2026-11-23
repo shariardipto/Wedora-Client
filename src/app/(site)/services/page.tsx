@@ -4,7 +4,8 @@ import { Suspense } from "react";
 import { CircleAlertIcon, SearchXIcon } from "lucide-react";
 import { BrowseFilters } from "@/components/services/browse-filters";
 import { PageIntro } from "@/components/motion/page-intro";
-import { ServiceCard, ServiceGrid, ServiceGridSkeleton } from "@/components/services/service-card";
+import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { SERVICE_GRID_CLASS, ServiceCard, ServiceGridSkeleton } from "@/components/services/service-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { PaginationNav } from "@/components/shared/pagination-nav";
 import { Button } from "@/components/ui/button";
@@ -77,13 +78,14 @@ async function Results({ query }: { query: BrowseQuery }) {
         Showing <span className="font-medium text-foreground">{start}–{end}</span> of{" "}
         <span className="font-medium text-foreground">{meta.total}</span> service{meta.total === 1 ? "" : "s"}
       </p>
-      <ServiceGrid>
+      {/* Each card rises in as it reaches the screen, a row at a time (same as the home page). */}
+      <Stagger as="ul" gap={0.07} className={SERVICE_GRID_CLASS}>
         {services.map((service) => (
-          <li key={service.id}>
+          <StaggerItem as="li" key={service.id}>
             <ServiceCard service={service} />
-          </li>
+          </StaggerItem>
         ))}
-      </ServiceGrid>
+      </Stagger>
       <PaginationNav
         page={meta.page}
         totalPages={meta.totalPages}
