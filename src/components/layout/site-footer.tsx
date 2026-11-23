@@ -46,6 +46,13 @@ const CONTACT_ITEMS: { icon: LucideIcon; label: string; text: string; href?: str
   { icon: ClockIcon, label: "Hours", text: siteConfig.contact.hours },
 ];
 
+/**
+ * Phones: Explore and Categories share one two-column grid (60/40), so both lists line up on the
+ * same column edge and the longest name ("Photography & Videography", ~179px) fits on one line
+ * down to a 360px screen. Wider phones (sm) spread each list across one row of columns instead.
+ */
+const PHONE_LINK_GRID = "grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] gap-x-3 gap-y-1.5";
+
 /** A four-point gold star, the ornament between the invitation and the links. */
 function Sparkle({ className }: { className?: string }) {
   return (
@@ -70,11 +77,24 @@ function ColumnHeading({ id, children }: { id: string; children: React.ReactNode
   );
 }
 
-function LinkColumn({ id, title, links, className }: { id: string; title: string; links: FooterLinkItem[]; className?: string }) {
+function LinkColumn({
+  id,
+  title,
+  links,
+  className,
+  listClassName,
+}: {
+  id: string;
+  title: string;
+  links: FooterLinkItem[];
+  className?: string;
+  /** Mobile layout of the links (a grid); from md up they are always a vertical list. */
+  listClassName?: string;
+}) {
   return (
     <nav data-reveal data-f-item aria-labelledby={id} className={cn("min-w-0", className)}>
       <ColumnHeading id={id}>{title}</ColumnHeading>
-      <ul className="mt-5 space-y-1.5 lg:space-y-2.5">
+      <ul className={cn("mt-5 md:block md:space-y-1.5 lg:space-y-2.5", listClassName)}>
         {links.map((link) => (
           <li key={link.href}>
             {/* Hover: a gold dash slides in and the label steps aside (styles in effects.css). */}
@@ -193,12 +213,15 @@ export function SiteFooter() {
       </div>
 
       {/* 2 · Brand, links and contact */}
-      <div className="container-page grid grid-cols-2 gap-x-6 gap-y-12 py-14 sm:py-16 md:grid-cols-3 md:gap-x-8 lg:grid-cols-12 lg:gap-8 lg:py-20">
+      {/* Mobile (below md): full-width sections divided by hairlines, each spreading its links in a
+          grid sized to them, so no column is left half empty. Tablet (md) and desktop (lg) layouts are
+          unchanged. */}
+      <div className="container-page grid grid-cols-1 gap-y-10 py-14 sm:py-16 md:grid-cols-3 md:gap-x-8 md:gap-y-12 lg:grid-cols-12 lg:gap-8 lg:py-20">
         {/* Brand: centred on phones, a row on tablets, a column on desktop. */}
         <div
           data-reveal
           data-f-item
-          className="col-span-2 flex flex-col items-center text-center md:col-span-3 md:flex-row md:justify-between md:text-left lg:col-span-4 lg:flex-col lg:items-start lg:justify-start lg:pr-4"
+          className="flex flex-col items-center text-center md:col-span-3 md:flex-row md:justify-between md:text-left lg:col-span-4 lg:flex-col lg:items-start lg:justify-start lg:pr-4"
         >
           <div className="flex flex-col items-center md:items-start">
             {/* Animated logo, looping at half speed (pauses off-screen). While centred, it is optically
@@ -236,11 +259,23 @@ export function SiteFooter() {
           </ul>
         </div>
 
-        <LinkColumn id="footer-explore" title="Explore" links={EXPLORE_LINKS} className="lg:col-span-2" />
-        <LinkColumn id="footer-categories" title="Categories" links={CATEGORY_LINKS} className="lg:col-span-3" />
+        <LinkColumn
+          id="footer-explore"
+          title="Explore"
+          links={EXPLORE_LINKS}
+          className="border-t border-background/10 pt-8 md:border-0 md:pt-0 lg:col-span-2"
+          listClassName={PHONE_LINK_GRID + " sm:grid-cols-4"}
+        />
+        <LinkColumn
+          id="footer-categories"
+          title="Categories"
+          links={CATEGORY_LINKS}
+          className="border-t border-background/10 pt-8 md:border-0 md:pt-0 lg:col-span-3"
+          listClassName={PHONE_LINK_GRID + " sm:grid-cols-3"}
+        />
 
         {/* Contact: email and phone are links; each row has a gold icon chip. */}
-        <div data-reveal data-f-item className="col-span-2 min-w-0 md:col-span-1 lg:col-span-3">
+        <div data-reveal data-f-item className="min-w-0 border-t border-background/10 pt-8 md:col-span-1 md:border-0 md:pt-0 lg:col-span-3">
           <ColumnHeading id="footer-contact">Get in touch</ColumnHeading>
           <address aria-labelledby="footer-contact" className="mt-5 not-italic">
             <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2 md:grid-cols-1">

@@ -422,10 +422,16 @@
   .footer-link {
     position: relative;
     display: inline-block;
-    padding-inline-end: 1rem;
-    margin-inline-end: -1rem;
     color: rgb(251 248 243 / 0.72);
     transition: color 0.35s ease;
+  }
+  /* The room for the hover shift is only needed where hovering exists; on touch screens it would just
+     make long labels (e.g. "Photography & Videography") wrap in the two-column phone grid. */
+  @media (hover: hover) {
+    .footer-link {
+      padding-inline-end: 1rem;
+      margin-inline-end: -1rem;
+    }
   }
   .footer-link > span {
     display: inline-block;
