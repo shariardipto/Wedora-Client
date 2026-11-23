@@ -30,11 +30,13 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
+  // Link previews (WhatsApp, Facebook, LinkedIn, X). No title or description here on purpose: Next.js then
+  // takes each page's own, so a shared link previews as that page. The image is app/opengraph-image.jpg
+  // (1200×630, kept small for WhatsApp); X reuses it as a large card.
   openGraph: {
     type: "website",
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — Wedding Planning Platform`,
-    description: siteConfig.description,
+    locale: "en_US",
   },
 };
 
