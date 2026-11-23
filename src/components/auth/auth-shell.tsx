@@ -17,7 +17,9 @@ export function AuthShell({ title, description, children, quote }: AuthShellProp
   return (
     <section className="container-page my-auto py-10 sm:py-14">
       <div className="mx-auto grid grid-cols-1 max-w-5xl overflow-hidden rounded-3xl bg-card shadow-[0_24px_60px_-30px_rgb(43_35_38/0.35)] ring-1 ring-border lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="relative isolate hidden min-h-[36rem] flex-col justify-end p-10 text-background lg:flex">
+        {/* Photo panel: the brand mark on its own at the top-left, the message at the bottom (the
+            classic split; the logo no longer sits squeezed onto the bouquet above the quote). */}
+        <div className="relative isolate hidden min-h-[36rem] flex-col justify-between p-10 text-background lg:flex">
           <Image
             src={heroImage}
             alt=""
@@ -30,14 +32,18 @@ export function AuthShell({ title, description, children, quote }: AuthShellProp
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-gradient-to-t from-night/90 via-night/40 to-night/10"
           />
+          {/* A soft shade at the top keeps the logo crisp over the brighter parts of the photo. */}
+          <div aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-44 bg-gradient-to-b from-night/60 to-transparent" />
           <FallingPetals count={10} className="-z-5" />
-          <AnimatedLogo mode="loop" speed={0.5} afterPageIntro className="h-16 self-start" wordClassName="fill-white" />
-          <p className="mt-6 font-display text-3xl leading-snug font-medium">
-            {quote ?? "Every beautiful day begins with the right people beside you."}
-          </p>
-          <p className="mt-3 text-sm text-background/75">
-            Trusted vendors · Clear bookings · One calm place
-          </p>
+          <AnimatedLogo mode="loop" speed={0.5} afterPageIntro className="h-20 self-start" wordClassName="fill-white" />
+          <div>
+            <p className="font-display text-3xl leading-snug font-medium">
+              {quote ?? "Every beautiful day begins with the right people beside you."}
+            </p>
+            <p className="mt-3 text-sm text-background/75">
+              Trusted vendors · Clear bookings · One calm place
+            </p>
+          </div>
         </div>
 
         <div className="px-5 py-10 sm:px-10 lg:px-12">
