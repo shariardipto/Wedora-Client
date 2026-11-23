@@ -93,10 +93,15 @@ export function PageLoader() {
       <GoldDust count={56} />
       <div className="relative px-6">
         <div data-loader-logo className="page-loader-logo">
+          {/* Optically centred: the artwork's box is centred in its frame, but its weight isn't. The thin
+              flourish fills the left while the W, the white wordmark and the leaves sit right of centre
+              (contrast-weighted centre of the ink ≈ 9.5% of the width right, ≈ 2% low). Shifting by that
+              puts the W on the centre line. Uses `translate` (not `transform`), so it never fights the
+              GSAP scale on the wrapper during the exit. */}
           <AnimatedLogo
             mode="once"
             speed={1}
-            className="h-24 sm:h-32"
+            className="h-24 -translate-x-[10%] -translate-y-[2%] sm:h-32"
             wordClassName="fill-white"
             onComplete={() => {
               logoWritten.current = true;
