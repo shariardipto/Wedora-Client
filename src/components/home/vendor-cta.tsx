@@ -6,12 +6,15 @@ import { Reveal } from "@/components/motion/reveal";
 import { Price } from "@/components/shared/price";
 import { Button } from "@/components/ui/button";
 
+// What the plans actually include (see billing/plan-cards.tsx): Free = up to 3 active services;
+// Premium = unlimited services and a crown on every listing, cancellable anytime.
 const perks: React.ReactNode[] = [
-  "Free plan with up to 3 active services",
-  "Booking requests in one dashboard",
+  "Start free with up to 3 live listings",
+  "Accept or decline requests from one inbox",
   <>
-    Premium: unlimited services &amp; badge — <Price amount={29} className="font-semibold" />/month
+    Premium, <Price amount={29} className="font-semibold" />/month: unlimited listings and a crown badge
   </>,
+  "No contracts. Cancel Premium anytime",
 ];
 
 export function VendorCta() {
@@ -35,11 +38,11 @@ export function VendorCta() {
                 id="vendor-cta-title"
                 className="mt-4 text-4xl leading-tight font-semibold sm:text-5xl"
               >
-                Bring your services to couples planning their day
+                Fill your calendar with couples ready to book
               </h2>
               <p className="mt-4 max-w-xl text-base leading-7 text-primary-foreground/80">
-                Create a vendor profile, publish your services and manage
-                booking requests — then upgrade when you are ready to grow.
+                List your services for free, receive date requests from engaged couples and answer every
+                enquiry from one dashboard. Upgrade to Premium when you want to list more.
               </p>
             </div>
             <div>
@@ -61,7 +64,7 @@ export function VendorCta() {
                   className="shine group h-12 rounded-full bg-background px-7 text-base text-primary hover:bg-background"
                 >
                   <Link href="/signup?role=vendor">
-                    Become a Vendor
+                    Start listing for free
                     <ArrowRightIcon
                       data-icon="inline-end"
                       className="transition-transform group-hover:translate-x-1"

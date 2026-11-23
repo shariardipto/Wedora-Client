@@ -7,22 +7,22 @@ const steps = [
   {
     icon: SearchIcon,
     title: "Discover",
-    body: "Browse approved services by category, location and budget, and sort by price.",
+    body: "Explore vetted photographers, venues, florists and more. Search by city and sort by price to build your shortlist.",
   },
   {
     icon: SendIcon,
     title: "Request",
-    body: "Choose your event date and location, add a note, and send a booking request.",
+    body: "Share your wedding date, venue city and a few notes. Your request goes straight to the vendor.",
   },
   {
     icon: CheckCircle2Icon,
     title: "Confirm",
-    body: "The vendor reviews it and accepts or declines — you see the update on your dashboard.",
+    body: "Each vendor accepts or declines, and their answer appears on your dashboard. No chasing required.",
   },
   {
     icon: PartyPopperIcon,
     title: "Celebrate",
-    body: "With every booking tracked in one place, you can focus on the day itself.",
+    body: "With your vendor team confirmed in one place, the final weeks are for the countdown, not the paperwork.",
   },
 ];
 
@@ -38,7 +38,7 @@ export function HowItWorks() {
           id="how-title"
           eyebrow="How Wedora works"
           title="From first search to “I do” in four steps"
-          description="A simple, transparent booking flow for couples — and a clear inbox of requests for vendors."
+          description="No endless email threads or guessing who replied. Just a clear path from your first idea to a confirmed vendor team."
         />
 
         <Stagger

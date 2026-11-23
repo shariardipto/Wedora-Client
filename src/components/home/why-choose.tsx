@@ -11,26 +11,29 @@ import { SectionHeading } from "./section-heading";
 import bouquetImage from "@/assets/images/bouquet.jpg";
 import ringsImage from "@/assets/images/rings.jpg";
 
+// Benefits in a couple's terms. Each is true of the product: listings are approved by the team and a
+// significant edit sends one back for review; couples only see approved, available services with
+// "starting from" prices; requests and answers live on the dashboard; couples never pay.
 const benefits = [
   {
     icon: ShieldCheckIcon,
-    title: "Reviewed before listed",
-    body: "Every service is checked by our team before it goes live, so you browse real, approved offers.",
+    title: "Vetted by real people",
+    body: "Our team reviews every listing before it goes live, and checks it again after major changes. What you see is what vendors actually offer.",
   },
   {
     icon: LayoutGridIcon,
-    title: "Everything in one place",
-    body: "Compare photographers, venues, caterers and more side by side — by category, location and price.",
+    title: "Compare at a glance",
+    body: "Photographers, venues, florists, caterers, stylists and bridal fashion side by side, with starting prices shown up front.",
   },
   {
     icon: CalendarCheckIcon,
-    title: "Clear booking status",
-    body: "Send a request in minutes and follow it from pending to accepted on your own dashboard.",
+    title: "No more chasing replies",
+    body: "Send your date and details in one short request, then find each vendor’s answer on your dashboard, not buried in your inbox.",
   },
   {
     icon: HeartHandshakeIcon,
-    title: "Free for couples",
-    body: "Browsing and booking requests cost nothing. Vendors choose a plan that fits their business.",
+    title: "Free for couples, always",
+    body: "Planning with Wedora costs you nothing. Vendors support the platform through optional Premium plans.",
   },
 ];
 
@@ -81,14 +84,14 @@ export function WhyChoose() {
           <SectionHeading
             id="why-title"
             align="left"
-            eyebrow="Why choose Wedora"
+            eyebrow="Why couples choose Wedora"
             title={
               <>
                 Less searching, more{" "}
                 <em className="font-medium text-primary">celebrating</em>
               </>
             }
-            description="Wedding planning has a hundred moving parts. Wedora brings the vendors you need into one trusted, organized space."
+            description="Planning a wedding means juggling dozens of vendors, quotes and dates. Wedora brings trusted professionals into one place, so you can compare honestly and book with confidence."
           />
 
           <Stagger as="ul" className="mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2">
