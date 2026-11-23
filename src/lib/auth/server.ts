@@ -78,7 +78,10 @@ function createAuth() {
                 parsed.data === "vendor" && typeof ctx.body?.businessName === "string"
                   ? ctx.body.businessName.trim() || null
                   : null;
-              return { data: { ...user, ...base, role: parsed.data, businessName } };
+              // Profile photos are set only from Profile Settings (D019). Better Auth's email sign-up
+              // would otherwise store any `image` URL sent with the request, unchecked. (It has to be
+              // cleared here: a before-hook can't remove a body key, Better Auth deep-merges it back.)
+              return { data: { ...user, ...base, role: parsed.data, businessName, image: null } };
             }
             // Social sign-ups choose their account type on /onboarding/role (BR-02).
             return { data: { ...user, ...base, role: null } };

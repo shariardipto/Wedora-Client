@@ -75,8 +75,7 @@ export function SignUpForm({
       setSubmitting(false);
       return;
     }
-    // Profile photos are added after sign-in, from Profile Settings.
-
+    // Profile photos are added after sign-in, from Profile Settings (not at sign-up).
     toast.success(`Welcome to Wedora, ${values.name.split(" ")[0]}! Your account is ready.`);
     router.replace(postAuthDestination(values.accountType, callbackUrl));
     router.refresh();
