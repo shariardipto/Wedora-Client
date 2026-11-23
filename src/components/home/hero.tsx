@@ -171,7 +171,9 @@ export function Hero() {
           fill
           preload
           placeholder="blur"
-          sizes="100vw"
+          // Hidden from lg up (the arch photo takes over), so desktops fetch only the tiniest version
+          // instead of a full-width copy nobody sees (mirrors the arch photo's "1px" below lg).
+          sizes="(min-width: 1024px) 1px, 100vw"
           className="object-cover object-[60%_center] opacity-40"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-night via-night/75 to-night/35" />
