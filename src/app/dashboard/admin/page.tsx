@@ -13,6 +13,7 @@ import { OverviewHeader, OverviewPanel, PhotoPrompt, StatCard } from "@/componen
 import { Button } from "@/components/ui/button";
 import { serverApi } from "@/lib/api-server";
 import { requireRole } from "@/lib/auth/session";
+import { countOf } from "@/lib/format";
 import type { AdminStats } from "@/lib/dashboard/types";
 
 export const metadata: Metadata = { title: "Admin Overview" };
@@ -23,7 +24,25 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <OverviewHeader role="admin" name={user.name} image={user.image} subtitle="Platform health at a glance." />
+      <OverviewHeader
+        role="admin"
+        name={user.name}
+        image={user.image}
+        status={
+          stats.pendingServices > 0
+            ? {
+                tone: "amber",
+                label: `${countOf(stats.pendingServices, "service")} waiting for review`,
+                href: "/dashboard/admin/services?status=pending",
+              }
+            : { tone: "green", label: "All listings reviewed" }
+        }
+        action={{
+          label: "Review Services",
+          href: stats.pendingServices > 0 ? "/dashboard/admin/services?status=pending" : "/dashboard/admin/services",
+          icon: ListChecksIcon,
+        }}
+      />
       <PhotoPrompt role="admin" image={user.image} />
 
       <section aria-label="Platform statistics" className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">

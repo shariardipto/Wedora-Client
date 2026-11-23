@@ -18,17 +18,20 @@ export function UserAvatar({
   name,
   image,
   className,
+  fallbackClassName,
 }: {
   name?: string | null;
   image?: string | null;
   className?: string;
+  /** Extra classes for the initials, e.g. a larger size on big avatars. */
+  fallbackClassName?: string;
 }) {
   return (
     <Avatar className={cn("size-9", className)}>
       {image && (
         <AvatarImage src={image} alt="" referrerPolicy="no-referrer" className="object-cover" />
       )}
-      <AvatarFallback className="bg-secondary text-xs font-semibold text-primary">
+      <AvatarFallback className={cn("bg-secondary text-xs font-semibold text-primary", fallbackClassName)}>
         {getInitials(name)}
       </AvatarFallback>
     </Avatar>

@@ -16,7 +16,7 @@ import { serverApi } from "@/lib/api-server";
 import { requireRole } from "@/lib/auth/session";
 import type { Booking } from "@/lib/bookings/types";
 import type { VendorStats } from "@/lib/dashboard/types";
-import { formatDate } from "@/lib/format";
+import { countOf, formatDate } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Vendor Overview" };
 
@@ -37,7 +37,21 @@ export default async function VendorDashboardPage() {
         role="vendor"
         name={user.name}
         image={user.image}
-        subtitle={user.businessName ?? "Add your business name in Profile Settings."}
+        detail={user.businessName ?? "Add your business name in Profile Settings"}
+        status={
+          stats.pendingBookings > 0
+            ? {
+                tone: "amber",
+                label: `${countOf(stats.pendingBookings, "request")} waiting for your reply`,
+                href: `${REQUESTS}?status=pending`,
+              }
+            : { tone: "green", label: "No requests waiting" }
+        }
+        action={
+          atLimit
+            ? { label: "Upgrade Plan", href: "/dashboard/vendor/subscription", icon: CrownIcon }
+            : { label: "Add Service", href: "/dashboard/vendor/services/new", icon: PlusCircleIcon }
+        }
       />
       <PhotoPrompt role="vendor" image={user.image} />
 

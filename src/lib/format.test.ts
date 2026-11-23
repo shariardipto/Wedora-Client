@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatEventDate, formatMoney, formatPrice } from "./format";
+import { formatDate, formatEventDate, formatMoney, formatPrice, countOf } from "./format";
 
 describe("formatDate", () => {
   it("formats in UTC, so server and browser print the same day (no hydration mismatch)", () => {
@@ -20,5 +20,14 @@ describe("other formatters", () => {
     expect(formatEventDate("2027-04-17")).toBe("Sat, Apr 17, 2027");
     expect(formatPrice(12500)).toBe("$12,500");
     expect(formatMoney(2900)).toBe("$29.00");
+  });
+});
+
+describe("countOf", () => {
+  it("uses the singular only for exactly one", () => {
+    expect(countOf(1, "request")).toBe("1 request");
+    expect(countOf(0, "request")).toBe("0 requests");
+    expect(countOf(3, "service")).toBe("3 services");
+    expect(countOf(2, "person", "people")).toBe("2 people");
   });
 });

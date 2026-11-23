@@ -36,3 +36,8 @@ export function formatEventDate(dateOnly: string): string {
 export function formatMoney(cents: number, currency = "usd"): string {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: currency.toUpperCase() }).format(cents / 100);
 }
+
+/** "1 request", "3 requests". */
+export function countOf(count: number, singular: string, plural = `${singular}s`): string {
+  return `${count} ${count === 1 ? singular : plural}`;
+}

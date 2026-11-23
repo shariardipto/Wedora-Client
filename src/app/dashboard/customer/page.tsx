@@ -9,16 +9,29 @@ import {
   SearchIcon,
 } from "lucide-react";
 import { BookingMiniList } from "@/components/dashboard/booking-mini-list";
-import { OverviewHeader, OverviewPanel, PhotoPrompt, StatCard } from "@/components/dashboard/overview-parts";
+import { OverviewHeader, OverviewPanel, PhotoPrompt, StatCard, type HeaderStatus } from "@/components/dashboard/overview-parts";
 import { Button } from "@/components/ui/button";
 import { serverApi } from "@/lib/api-server";
 import { requireRole } from "@/lib/auth/session";
+import { countOf } from "@/lib/format";
 import type { Booking } from "@/lib/bookings/types";
 import type { CustomerStats } from "@/lib/dashboard/types";
 
 export const metadata: Metadata = { title: "Customer Overview" };
 
 const BOOKINGS = "/dashboard/customer/bookings";
+
+/** What needs attention, as the header's status chip. */
+function customerStatus(stats: CustomerStats): HeaderStatus {
+  if (stats.totalBookings === 0) return { tone: "neutral", label: "No booking requests yet" };
+  if (stats.pendingBookings > 0) {
+    return { tone: "amber", label: `${countOf(stats.pendingBookings, "request")} awaiting a reply`, href: `${BOOKINGS}?status=pending` };
+  }
+  if (stats.acceptedBookings > 0) {
+    return { tone: "green", label: `${countOf(stats.acceptedBookings, "booking")} confirmed`, href: `${BOOKINGS}?status=accepted` };
+  }
+  return { tone: "neutral", label: "Every request has an answer" };
+}
 
 export default async function CustomerDashboardPage() {
   const { user } = await requireRole("customer");
@@ -29,7 +42,13 @@ export default async function CustomerDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <OverviewHeader role="customer" name={user.name} image={user.image} />
+      <OverviewHeader
+        role="customer"
+        name={user.name}
+        image={user.image}
+        status={customerStatus(stats)}
+        action={{ label: "Browse Services", href: "/services", icon: SearchIcon }}
+      />
       <PhotoPrompt role="customer" image={user.image} />
 
       <section aria-label="Booking statistics" className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
