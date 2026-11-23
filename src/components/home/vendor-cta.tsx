@@ -7,12 +7,12 @@ import { Price } from "@/components/shared/price";
 import { Button } from "@/components/ui/button";
 
 // What the plans actually include (see billing/plan-cards.tsx): Free = up to 3 active services;
-// Premium = unlimited services and a crown on every listing, cancellable anytime.
+// Premium = unlimited services and the Premium vendor badge on every listing, cancellable anytime.
 const perks: React.ReactNode[] = [
   "Start free with up to 3 live listings",
   "Accept or decline requests from one inbox",
   <>
-    Premium, <Price amount={29} className="font-semibold" />/month: unlimited listings and a crown badge
+    Premium, <Price amount={29} className="font-semibold" />/month: unlimited listings and a Premium vendor badge
   </>,
   "No contracts. Cancel Premium anytime",
 ];

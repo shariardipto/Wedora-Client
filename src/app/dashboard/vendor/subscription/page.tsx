@@ -52,7 +52,7 @@ export default async function SubscriptionPage() {
                   : `Renews on ${formatDate(plan.expiresAt)} for $29. Cancel anytime.`
                 : lapsed
                   ? `Your Premium plan ended on ${formatDate(plan.expiresAt)}. Upgrade again any time.`
-                  : "Up to 3 active services. Upgrade for unlimited services and the Premium crown."}
+                  : "Up to 3 active services. Upgrade for unlimited services and the Premium vendor badge."}
             </p>
           </div>
         </div>

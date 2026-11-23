@@ -123,7 +123,7 @@ export function CheckoutStatus({ sessionId }: { sessionId: string }) {
               <h1 className="mt-2 text-4xl font-semibold">Welcome to Premium</h1>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
                 {amount} paid. You can now keep unlimited services active, and your listings show the Premium
-                crown.
+                vendor badge.
                 {expiresAt && ` Your plan renews on ${formatDate(expiresAt)}.`}
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

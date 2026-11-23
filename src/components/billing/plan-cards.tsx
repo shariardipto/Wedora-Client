@@ -17,9 +17,11 @@ const PLANS: Plan[] = [
     name: "Free",
     tagline: "Everything you need to get started.",
     price: 0,
+    // Feature names follow the assignment brief's plan descriptions.
     features: [
-      "Up to 3 active services",
-      "Booking requests in your dashboard",
+      "Maximum 3 active services",
+      "Basic vendor dashboard",
+      "Booking request management",
       "Listings reviewed and published by our team",
     ],
   },
@@ -30,8 +32,8 @@ const PLANS: Plan[] = [
     price: 29,
     features: [
       "Unlimited active services",
-      "Premium crown on your listings",
-      "Everything in Free",
+      "Premium vendor badge on your listings",
+      "All Free plan features",
       "Cancel anytime — keep Premium until the period ends",
     ],
   },
