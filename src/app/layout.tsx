@@ -55,8 +55,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
-        {/* Lets CSS hide GSAP-animated elements only when scripts actually run (no flash, no-JS safe). */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* Before first paint: "js" lets CSS hide GSAP-animated elements only when scripts actually run
+            (no flash, no-JS safe); "intro-skip" keeps the home intro hidden when the page is opened at a
+            section (e.g. /#how-it-works), see PageLoader. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){var d=document.documentElement;d.classList.add('js');if(location.pathname==='/'&&location.hash.length>1)d.classList.add('intro-skip')})()",
+          }}
+        />
       </head>
       <body className="flex min-h-svh flex-col">
         <MotionProvider>{children}</MotionProvider>

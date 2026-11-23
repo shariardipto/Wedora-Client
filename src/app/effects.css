@@ -262,7 +262,7 @@
     display: none;
   }
   @media (prefers-reduced-motion: no-preference) {
-    .js .page-loader {
+    .js:not(.intro-skip) .page-loader {
       display: flex;
       flex-direction: column;
       align-items: center;

@@ -9,6 +9,11 @@
 let done = false;
 const waiting = new Set<() => void>();
 
+/** A new intro is starting (the home page can be shown again via client navigation): wait for it. */
+export function startIntro() {
+  done = false;
+}
+
 export function markIntroDone() {
   if (done) return;
   done = true;
@@ -18,7 +23,9 @@ export function markIntroDone() {
 
 /** Runs `callback` after the page loader finishes. Returns a cancel function. */
 export function afterIntro(callback: () => void): () => void {
-  if (done || !document.querySelector("[data-page-loader]")) {
+  const loader = document.querySelector("[data-page-loader]");
+  // Nothing to wait for: this intro is done, there is none on this page, or it is already opening.
+  if (done || !loader || loader.classList.contains("page-loader-exit")) {
     callback();
     return () => undefined;
   }

@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { GoldDust } from "@/components/motion/gold-dust";
-import { markIntroDone } from "@/lib/intro";
+import { markIntroDone, startIntro } from "@/lib/intro";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const MAX_WAIT_MS = 4000;
@@ -19,7 +20,18 @@ function pageReady(): Promise<void> {
 }
 
 /**
- * Full-page intro shown on every full load / refresh of public pages:
+ * Full-page intro for the HOME page: it plays every time the plain home page is shown (a full load,
+ * a reload, or navigating to Home from another page). Opening the home page at a section
+ * (/#how-it-works, /#for-vendors) goes straight there, and other pages never show it.
+ */
+export function PageLoader() {
+  const pathname = usePathname();
+  // Leaving "/" unmounts the intro, so arriving at "/" again mounts (and plays) a fresh one.
+  return pathname === "/" ? <HomeIntro /> : null;
+}
+
+/**
+ * The intro itself:
  * the Wedora logo writes itself on deep wine (the approved animation, at full speed).
  * Then the logo softens and fades in the centre, and the page opens from the centre
  * outward through a soft-edged circle as the panel dissolves.
@@ -28,7 +40,7 @@ function pageReady(): Promise<void> {
  * hidden without JavaScript or with reduced motion, and a 9 s CSS fallback
  * removes it if a script ever fails.
  */
-export function PageLoader() {
+function HomeIntro() {
   const root = useRef<HTMLDivElement>(null);
   const [finished, setFinished] = useState(false);
   // The logo's "once" animation reports when it has finished writing (it may finish before this effect subscribes).
@@ -45,11 +57,19 @@ export function PageLoader() {
         markIntroDone();
         setFinished(true);
       };
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // Opened at a section (e.g. "How It Works" from another page): skip straight to it. This runs
+      // before the first paint, so the loader never shows; then lift the full-load guard so a later
+      // plain Home click gets its intro.
+      const atSection = window.location.hash.length > 1;
+      if (atSection || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         finish();
+        html.classList.remove("intro-skip");
         return;
       }
+      html.classList.remove("intro-skip");
 
+      // Entrance animations on the page (afterIntro) wait for this intro, also on a repeat visit.
+      startIntro();
       html.classList.add("intro-active");
       const logo = gsap.utils.selector(el)("[data-loader-logo]")[0];
       // Enter: the logo writes itself (AnimatedLogo, once, at full speed).
