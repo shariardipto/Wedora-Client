@@ -4,6 +4,7 @@ import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { jwt } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
+import type { MongoClient } from "mongodb";
 import { getAuthDatabase, getAuthMongoClient } from "@/lib/database";
 import { getAuthEnv } from "./env";
 import { profileUpdateSchema, signUpSchema } from "./validation";
@@ -158,11 +159,16 @@ function createAuth() {
   });
 }
 
-let instance: ReturnType<typeof createAuth> | undefined;
+let instance: { auth: ReturnType<typeof createAuth>; client: MongoClient } | undefined;
 
-/** Created lazily so builds do not need runtime secrets. */
+/**
+ * Created lazily so builds do not need runtime secrets. Rebuilt when the database client has been
+ * replaced (see lib/database.ts): the auth instance holds the database it was created with.
+ */
 export function getAuth() {
-  return (instance ??= createAuth());
+  const client = getAuthMongoClient();
+  if (!instance || instance.client !== client) instance = { auth: createAuth(), client };
+  return instance.auth;
 }
 
 export type Auth = ReturnType<typeof getAuth>;
