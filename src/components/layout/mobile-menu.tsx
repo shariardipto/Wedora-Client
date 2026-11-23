@@ -76,7 +76,9 @@ export function MobileMenu({
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="grain w-full max-w-none gap-0 overflow-x-hidden overflow-y-auto border-0 bg-night p-0 text-background data-[side=right]:w-full data-[side=right]:sm:max-w-none"
+        // data-[side=right]:border-l-0 removes the sheet's default left border (a light 1px line on this
+        // dark panel); a plain border-0 can't, because the side-specific rule is more specific.
+        className="grain w-full max-w-none gap-0 overflow-x-hidden overflow-y-auto border-0 bg-night p-0 text-background data-[side=right]:w-full data-[side=right]:border-l-0 data-[side=right]:sm:max-w-none"
       >
         {/* Glows are clipped to the panel so they can never create sideways scrolling. */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
