@@ -1,5 +1,6 @@
 import { PageLoader } from "@/components/motion/page-loader";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { FooterGate } from "./footer-gate";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 
@@ -19,7 +20,10 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <main id="main-content" className="flex flex-1 scroll-mt-24 flex-col overflow-x-clip">
         {children}
       </main>
-      <SiteFooter />
+      {/* No footer on sign-in / sign-up (see FooterGate). */}
+      <FooterGate>
+        <SiteFooter />
+      </FooterGate>
     </>
   );
 }

@@ -13,8 +13,9 @@ type AuthShellProps = {
 
 /** Two-panel layout for Sign In / Sign Up: photo on the left, form on the right. */
 export function AuthShell({ title, description, children, quote }: AuthShellProps) {
+  // my-auto: with no footer below (FooterGate), the panel sits centred in the space under the navbar.
   return (
-    <section className="container-page py-10 sm:py-14">
+    <section className="container-page my-auto py-10 sm:py-14">
       <div className="mx-auto grid grid-cols-1 max-w-5xl overflow-hidden rounded-3xl bg-card shadow-[0_24px_60px_-30px_rgb(43_35_38/0.35)] ring-1 ring-border lg:grid-cols-[0.95fr_1.05fr]">
         <div className="relative isolate hidden min-h-[36rem] flex-col justify-end p-10 text-background lg:flex">
           <Image
