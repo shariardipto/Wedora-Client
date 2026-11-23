@@ -1,8 +1,10 @@
 "use client";
 
-import { useId, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { LOGO_LETTERS } from "@/components/brand/animated-logo-data";
-import { MOTION_OK, gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { MOTION_OK, gsap, useGSAP } from "@/lib/gsap";
+import { afterIntro } from "@/lib/intro";
 import { cn } from "@/lib/utils";
 
 /** The WEDORA letters' box in the logo's units, with room for the hairline. */
@@ -18,6 +20,9 @@ const SPOT_RADIUS = 80;
  */
 export function FooterWordmark({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  // Set by the animation below: un-writes the word so it writes again (on a new page).
+  const resetWord = useRef<(() => void) | null>(null);
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const id = (name: string) => `fw-${name}-${uid}`;
   const letters = LOGO_LETTERS.map((_, index) => id(`l${index}`));
@@ -35,7 +40,7 @@ export function FooterWordmark({ className }: { className?: string }) {
         const outlines = q("[data-outline] use");
         const layers = q("[data-base],[data-glow]");
 
-        // 1 · Write the word each time it scrolls into view.
+        // 1 · Write the word each time it comes into view.
         gsap.set(outlines, { strokeDasharray: 1, strokeDashoffset: 1 });
         gsap.set(layers, { autoAlpha: 0 });
         gsap.set(el, { autoAlpha: 1 });
@@ -46,12 +51,30 @@ export function FooterWordmark({ className }: { className?: string }) {
           // autoRound off: GSAP rounds px values by default, which would snap a 1 → 0 offset in one step.
           .to(outlines, { strokeDashoffset: 0, autoRound: false, duration: 4.8, ease: "sine.inOut", stagger: 0.35 })
           .to(layers, { autoAlpha: 1, duration: 2.2, ease: "power1.out" }, "-=1.8");
-        ScrollTrigger.create({
-          trigger: el,
-          start: "top bottom-=40",
-          onEnter: () => write.restart(),
-          onLeaveBack: () => write.pause(0),
-        });
+        // Writes once per page: once most of the word is on screen (not when its top edge peeks in,
+        // which left it half-written by the time it was in view), and never behind the home intro (a
+        // reload at the footer restores the scroll position; the word used to finish before the intro
+        // opened). Scrolling away and back keeps it written; a reload or another page writes it again.
+        let waitForIntro: (() => void) | null = null;
+        const writer = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting || write.progress() > 0 || waitForIntro) return;
+            waitForIntro = afterIntro(() => {
+              waitForIntro = null;
+              write.play();
+            });
+          },
+          { threshold: 0.6, rootMargin: "0px 0px -10% 0px" },
+        );
+        writer.observe(el);
+        resetWord.current = () => {
+          waitForIntro?.();
+          waitForIntro = null;
+          write.pause(0);
+          // Re-observing reports the current state at once, so a word already on screen writes again.
+          writer.unobserve(el);
+          writer.observe(el);
+        };
 
         // 2 · The light drifts along the word on its own and follows a mouse while it's over the word.
         const drift = { x: BOX.x + 60, y: MID_Y };
@@ -111,6 +134,9 @@ export function FooterWordmark({ className }: { className?: string }) {
 
         return () => {
           run(false);
+          resetWord.current = null;
+          writer.disconnect();
+          waitForIntro?.();
           visibility.disconnect();
           el.removeEventListener("pointermove", onMove);
           el.removeEventListener("pointerleave", onLeave);
@@ -119,6 +145,17 @@ export function FooterWordmark({ className }: { className?: string }) {
     },
     { scope: root },
   );
+
+  // The footer stays mounted across client-side navigation, so a new page un-writes the word here
+  // (a reload starts fresh anyway). The first run is the initial page: nothing to reset.
+  const firstPath = useRef(true);
+  useEffect(() => {
+    if (firstPath.current) {
+      firstPath.current = false;
+      return;
+    }
+    resetWord.current?.();
+  }, [pathname]);
 
   const word = (prefix: string) =>
     letters.map((letter) => <use key={`${prefix}-${letter}`} href={`#${letter}`} />);
