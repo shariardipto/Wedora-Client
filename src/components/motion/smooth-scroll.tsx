@@ -67,5 +67,41 @@ export function SmoothScroll() {
     return () => cancelAnimationFrame(id);
   }, [pathname]);
 
+  // Arriving at "/page#section": Next.js scrolls to the section, but content streamed in above it
+  // afterwards (e.g. the featured services replacing their placeholder) pushes it down the screen.
+  // Keep the section in place while the layout settles: until the visitor scrolls, or 3 s pass.
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    const realign = () => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      const drift = target.getBoundingClientRect().top - margin;
+      if (Math.abs(drift) < 2) return;
+      const top = window.scrollY + drift;
+      if (activeLenis) {
+        // Re-measure first: Lenis clamps to the page height it last measured, which may still be the
+        // previous (shorter) page's.
+        activeLenis.resize();
+        activeLenis.scrollTo(top, { immediate: true, force: true });
+      } else {
+        window.scrollTo({ top, behavior: "instant" });
+      }
+    };
+    const layout = new ResizeObserver(realign);
+    const events = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+    let timer = 0;
+    const stop = () => {
+      layout.disconnect();
+      window.clearTimeout(timer);
+      events.forEach((type) => window.removeEventListener(type, stop));
+    };
+    layout.observe(document.body);
+    events.forEach((type) => window.addEventListener(type, stop, { passive: true }));
+    timer = window.setTimeout(stop, 3000);
+    return stop;
+  }, [pathname]);
+
   return null;
 }

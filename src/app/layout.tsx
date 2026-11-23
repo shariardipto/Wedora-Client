@@ -47,6 +47,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={cn("h-full antialiased", manrope.variable, cormorant.variable)}
+      // html is scroll-smooth (globals.css). This tells Next.js to switch smoothing off while it resets
+      // the scroll on navigation, so a new page opens at its top. Without it the reset is animated, gets
+      // overridden, and a link clicked in the footer opened the next page at its bottom.
+      data-scroll-behavior="smooth"
       // The inline script below adds "js" before hydration.
       suppressHydrationWarning
     >

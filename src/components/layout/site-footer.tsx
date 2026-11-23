@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   ArrowRightIcon,
   ArrowUpIcon,
@@ -17,24 +16,25 @@ import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { SERVICE_CATEGORIES, categoryHref } from "@/lib/categories";
 import { cn } from "@/lib/utils";
+import { FooterLink } from "./footer-link";
 import { FooterShell } from "./footer-shell";
 import { FooterWordmark } from "./footer-wordmark";
 
-type FooterLink = { label: string; href: string };
+type FooterLinkItem = { label: string; href: string };
 
-const EXPLORE_LINKS: FooterLink[] = [
+const EXPLORE_LINKS: FooterLinkItem[] = [
   { label: "Home", href: "/" },
   { label: "Browse Services", href: "/services" },
   { label: "How It Works", href: "/#how-it-works" },
   { label: "Become a Vendor", href: "/signup?role=vendor" },
 ];
 
-const CATEGORY_LINKS: FooterLink[] = SERVICE_CATEGORIES.map((category) => ({
+const CATEGORY_LINKS: FooterLinkItem[] = SERVICE_CATEGORIES.map((category) => ({
   label: category.name,
   href: categoryHref(category.slug),
 }));
 
-const ACCOUNT_LINKS: FooterLink[] = [
+const ACCOUNT_LINKS: FooterLinkItem[] = [
   { label: "Sign In", href: "/signin" },
   { label: "Create an Account", href: "/signup" },
 ];
@@ -70,7 +70,7 @@ function ColumnHeading({ id, children }: { id: string; children: React.ReactNode
   );
 }
 
-function LinkColumn({ id, title, links, className }: { id: string; title: string; links: FooterLink[]; className?: string }) {
+function LinkColumn({ id, title, links, className }: { id: string; title: string; links: FooterLinkItem[]; className?: string }) {
   return (
     <nav data-reveal data-f-item aria-labelledby={id} className={cn("min-w-0", className)}>
       <ColumnHeading id={id}>{title}</ColumnHeading>
@@ -78,9 +78,9 @@ function LinkColumn({ id, title, links, className }: { id: string; title: string
         {links.map((link) => (
           <li key={link.href}>
             {/* Hover: a gold dash slides in and the label steps aside (styles in effects.css). */}
-            <Link href={link.href} className="footer-link py-1 text-sm lg:py-0.5">
-              {link.label}
-            </Link>
+            <FooterLink href={link.href} className="footer-link py-1 text-sm lg:py-0.5">
+              <span>{link.label}</span>
+            </FooterLink>
           </li>
         ))}
       </ul>
@@ -164,10 +164,10 @@ export function SiteFooter() {
               size="lg"
               className="shine group h-12 w-full rounded-full bg-gold-light px-7 text-base text-night shadow-[0_10px_40px_-12px_rgb(220_191_142/0.75)] hover:bg-gold-light sm:w-auto"
             >
-              <Link href="/services">
+              <FooterLink href="/services">
                 Explore Vendors
                 <ArrowRightIcon data-icon="inline-end" className="transition-transform group-hover:translate-x-1" />
-              </Link>
+              </FooterLink>
             </Button>
           </Magnetic>
           <Magnetic>
@@ -177,7 +177,7 @@ export function SiteFooter() {
               variant="outline"
               className="h-12 w-full rounded-full border-background/25 bg-background/5 px-7 text-base text-background backdrop-blur-sm hover:border-gold-light hover:bg-background/10 hover:text-background sm:w-auto"
             >
-              <Link href="/#how-it-works">How It Works</Link>
+              <FooterLink href="/#how-it-works">How It Works</FooterLink>
             </Button>
           </Magnetic>
         </div>
@@ -201,7 +201,7 @@ export function SiteFooter() {
           <div className="flex flex-col items-center md:items-start">
             {/* Animated logo, looping at half speed (pauses off-screen). While centred, it is optically
                 centred on its wordmark (the flourish makes the artwork asymmetric). */}
-            <Link
+            <FooterLink
               href="/"
               aria-label="Wedora home"
               className="inline-flex shrink-0 items-center rounded-md focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
@@ -212,7 +212,7 @@ export function SiteFooter() {
                 className="h-16 -translate-x-[16%] md:translate-x-0"
                 wordClassName="fill-white"
               />
-            </Link>
+            </FooterLink>
             <p className="mt-4 font-display text-xl text-gold-light/90 italic lg:text-lg xl:text-xl">{siteConfig.tagline}</p>
           </div>
           <ul className="mt-6 flex shrink-0 gap-2.5 md:mt-0 lg:mt-8" aria-label="Wedora on social media">
@@ -297,9 +297,9 @@ export function SiteFooter() {
             className="order-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 sm:order-none sm:justify-self-end"
           >
             {ACCOUNT_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className="footer-link py-1 text-xs">
-                {link.label}
-              </Link>
+              <FooterLink key={link.href} href={link.href} className="footer-link py-1 text-xs">
+                <span>{link.label}</span>
+              </FooterLink>
             ))}
           </nav>
         </div>
