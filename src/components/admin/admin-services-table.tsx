@@ -169,8 +169,9 @@ export function AdminServicesTable({ services }: { services: Service[] }) {
 
   return (
     <>
-      {/* Phones and tablets: one card per service, every detail and action visible without sideways scrolling. */}
-      <ul className="grid gap-3 md:grid-cols-2 lg:hidden" aria-label="Services">
+      {/* Phones, tablets and small laptops (below 1280px, where a full table can't fit beside the
+          sidebar): one card per service, every detail and action visible without sideways scrolling. */}
+      <ul className="grid gap-3 md:grid-cols-2 xl:hidden" aria-label="Services">
         {services.map((service) => (
           <li key={service.id} className="flex flex-col rounded-2xl bg-card p-4 shadow-sm ring-1 ring-border">
             <div className="flex gap-3">
@@ -204,13 +205,14 @@ export function AdminServicesTable({ services }: { services: Service[] }) {
         ))}
       </ul>
 
-      {/* Desktop: the full table. */}
-      <div className="hidden overflow-hidden rounded-2xl bg-card ring-1 ring-border lg:block">
+      {/* 1280px and up: a table that fits its panel (952px at most) with nothing cut off. The vendor
+          sits under the service name, status badges stack, and the service column takes the rest
+          (names shorten with …). */}
+      <div className="hidden overflow-hidden rounded-2xl bg-card ring-1 ring-border xl:block">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="min-w-64 pl-4">Service</TableHead>
-              <TableHead>Vendor</TableHead>
+              <TableHead className="w-full pl-4">Service</TableHead>
               <TableHead>Category</TableHead>
               <TableHead className="text-right">Price</TableHead>
               <TableHead>Status</TableHead>
@@ -223,31 +225,35 @@ export function AdminServicesTable({ services }: { services: Service[] }) {
           <TableBody>
             {services.map((service) => (
               <TableRow key={service.id}>
-                <TableCell className="pl-4">
+                {/* max-w-0 + the header's w-full let this column shrink, so long text truncates. */}
+                <TableCell className="max-w-0 pl-4">
                   <div className="flex items-center gap-3">
                     <div className="relative size-12 shrink-0 overflow-hidden rounded-lg bg-muted">
                       {service.images[0] && (
                         <Image src={service.images[0]} alt="" fill sizes="48px" className="object-cover" />
                       )}
                     </div>
-                    <div className="min-w-0">
-                      <p className="max-w-64 truncate font-medium">{service.serviceName}</p>
-                      <p className="max-w-64 truncate text-xs text-muted-foreground">{service.location}</p>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-medium">{service.serviceName}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {service.vendor?.businessName ?? service.vendor?.name ?? "—"} · {service.location}
+                      </p>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="max-w-40 truncate">
-                  {service.vendor?.businessName ?? service.vendor?.name ?? "—"}
+                <TableCell className="text-sm whitespace-nowrap">
+                  {getCategoryName(service.category)}
                 </TableCell>
-                <TableCell className="whitespace-nowrap">{getCategoryName(service.category)}</TableCell>
-                <TableCell className="text-right"><Price amount={service.price} /></TableCell>
+                <TableCell className="text-right tabular-nums">
+                  <Price amount={service.price} />
+                </TableCell>
                 <TableCell>
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-col items-start gap-1">
                     <ServiceStatusBadge status={service.status} />
                     {!service.isAvailable && <AvailabilityBadge isAvailable={false} />}
                   </div>
                 </TableCell>
-                <TableCell className="whitespace-nowrap text-muted-foreground">
+                <TableCell className="text-xs whitespace-nowrap text-muted-foreground">
                   {formatDate(service.createdAt, "short")}
                 </TableCell>
                 <TableCell className="pr-4 text-right">{actions(service)}</TableCell>
