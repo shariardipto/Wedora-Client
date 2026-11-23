@@ -285,11 +285,14 @@ export function SiteFooter() {
 
       {/* 4 · The closing rule with the back-to-top seal; account links and copyright beside it */}
       <div className="container-page pt-10 pb-8 sm:pt-14 sm:pb-10">
-        <div className="relative grid grid-cols-1 justify-items-center gap-5 text-xs text-background/60 sm:grid-cols-[1fr_auto_1fr] sm:items-end sm:gap-6">
+        <div className="relative grid grid-cols-1 justify-items-center gap-5 text-xs text-background/60 sm:grid-cols-[1fr_auto_1fr] sm:items-end sm:gap-x-6 sm:gap-y-1">
           <span
             aria-hidden="true"
             className="absolute inset-x-0 top-[2.75rem] h-px bg-linear-to-r from-transparent via-gold/35 to-transparent"
           />
+          {/* Row 1 (the seal's height): copyright and account links on its bottom edge, the same line and
+              the same distance below the gold rule as before. Row 2: the studio credit, 4px under the
+              copyright (a row gap of gap-y-1). Phones stack: seal, links, copyright, credit. */}
           <p className="order-3 sm:order-none sm:justify-self-start">© {year} Wedora. All rights reserved.</p>
           <BackToTop className="relative" />
           <nav
@@ -297,11 +300,23 @@ export function SiteFooter() {
             className="order-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 sm:order-none sm:justify-self-end"
           >
             {ACCOUNT_LINKS.map((link) => (
-              <FooterLink key={link.href} href={link.href} className="footer-link py-1 text-xs">
+              <FooterLink key={link.href} href={link.href} className="footer-link py-1 text-xs sm:py-0">
                 <span>{link.label}</span>
               </FooterLink>
             ))}
           </nav>
+          <p className="order-4 -mt-4 text-center sm:order-none sm:col-start-1 sm:mt-0 sm:justify-self-start sm:text-left">
+            Designed &amp; developed by{" "}
+            <a
+              href="https://thecodeworkstudio.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-sm font-medium text-gold-light underline-offset-4 transition-colors hover:text-background hover:underline focus-visible:underline focus-visible:outline-none"
+            >
+              The Code Work Studio.
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </p>
         </div>
       </div>
     </FooterShell>

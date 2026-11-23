@@ -12,10 +12,11 @@ export const siteConfig = {
     hours: "Mon – Fri, 9am – 6pm CT",
   },
   socials: [
-    { name: "Facebook", href: "https://www.facebook.com/" },
-    { name: "Instagram", href: "https://www.instagram.com/" },
-    { name: "X", href: "https://x.com/" },
-    { name: "YouTube", href: "https://www.youtube.com/" },
+    { name: "Facebook", href: "https://www.facebook.com/TheCodeWorkStudio" },
+    { name: "Instagram", href: "https://www.instagram.com/TheCodeWorkStudio" },
+    { name: "X", href: "https://x.com/TheCodeWorkStudio" },
+    // YouTube channel links use the @handle form.
+    { name: "YouTube", href: "https://www.youtube.com/@TheCodeWorkStudio" },
   ],
 } as const;
 
