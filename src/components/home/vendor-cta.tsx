@@ -49,7 +49,8 @@ export function VendorCta() {
                     <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-gold text-night">
                       <CheckIcon className="size-3.5" aria-hidden="true" />
                     </span>
-                    {perk}
+                    {/* One wrapper, so a perk with a price stays one line of text (not separate flex items). */}
+                    <span>{perk}</span>
                   </li>
                 ))}
               </ul>
