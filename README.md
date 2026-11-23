@@ -37,7 +37,7 @@ A wedding services marketplace. Couples discover trusted vendors and request boo
 - [Scripts](#scripts)
 - [Quality](#quality)
 - [Deployment](#deployment)
-- [Credits](#credits)
+- [Copyright](#copyright)
 
 ## Overview
 
@@ -81,7 +81,7 @@ Services are grouped into six categories: Photography & Videography, Wedding Ven
 - **Booking Requests:** customer contact details and message; accept or reject each request once.
 - **Plans:**
   - **Free:** up to 3 active services.
-  - **Premium:** unlimited services for $29/month through Stripe Checkout, with cancel and resume and a full payment history.
+  - **Premium:** unlimited services and a Premium vendor badge for $29/month through Stripe Checkout, with cancel and resume and a full payment history.
 - **Dashboard overview:** service, booking and plan statistics.
 
 ### For admins
@@ -99,14 +99,15 @@ Services are grouped into six categories: Photography & Videography, Wedding Ven
   - Users can never set their own role, block status or plan.
   - Premium is activated only by the API's verified Stripe webhook, never by the browser.
 - **Profile Settings:**
-  - Name, phone, business name (vendors) and a profile photo.
+  - Name, phone, business name (vendors) and a profile photo. Sign-up stays short: the photo is added here after signing in.
   - Photos can be dragged in. They're cropped and shrunk to a 512 px WebP in the browser before upload; in testing, a 9 MB photo became 37 KB.
 - **"Golden Hour" interface:**
-  - A WebGL hero (Three.js with React Three Fiber) and GSAP text reveals.
+  - **An animated logo that writes itself** (SVG and GSAP): it loops in the navbar, footer and sign-in panel, and opens the home page as a full-page intro.
+  - A WebGL hero (Three.js with React Three Fiber) and GSAP text reveals. Cards rise in one by one as they scroll into view.
+  - A closing footer scene: the WEDORA wordmark writes itself while a gold light drifts through the letters and follows the cursor.
   - Lenis smooth scrolling, tilt cards, and a floating glass navbar.
-  - A full-page intro on public pages.
 - **Responsive and accessible:**
-  - Mobile-first layouts with no horizontal scrolling.
+  - Mobile-first layouts with no horizontal scrolling. On phones the dashboards switch to a one-row tab bar, and admin tables become card lists.
   - Keyboard and screen-reader friendly.
   - Every animation respects *reduced motion*.
 - **Fast:**
@@ -244,7 +245,7 @@ Copy [`.env.example`](.env.example) to `.env.local`. Only variables prefixed wit
 ## Quality
 
 - **Static checks:** strict TypeScript and ESLint with a zero-warning policy.
-- **Unit tests:** 65 Vitest tests. They cover sign-up and profile validation, safe redirect handling, service and admin query parsing, booking validation, billing helpers, date and money formatting, image upload checks, and the in-browser image shrinking.
+- **Unit tests:** 71 Vitest tests. They cover sign-up and profile validation, safe redirect handling, service and admin query parsing, booking validation, billing helpers, date and money formatting, image upload checks, the in-browser image shrinking, and the animated logo's timeline.
 - **Lighthouse on the live site** (desktop, November 2026):
   - Performance: Home 98, Browse Services 94, Sign In 97.
   - Layout shift (CLS): 0.
@@ -263,3 +264,9 @@ The app is deployed on **Vercel**.
 4. On the **API** deployment:
    - `CLIENT_ORIGIN`, `BETTER_AUTH_ISSUER` and `BETTER_AUTH_AUDIENCE`: this app's URL.
    - `BETTER_AUTH_JWKS_URL`: `https://<your-domain>/api/auth/jwks`
+
+## Copyright
+
+© 2026 Wedora. All rights reserved.
+
+Designed and developed by [The Code Work Studio](https://thecodeworkstudio.com).
