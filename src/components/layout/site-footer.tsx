@@ -46,11 +46,6 @@ const CONTACT_ITEMS: { icon: LucideIcon; label: string; text: string; href?: str
   { icon: ClockIcon, label: "Hours", text: siteConfig.contact.hours },
 ];
 
-/**
- * Phones: Explore and Categories share one two-column grid (60/40), so both lists line up on the
- * same column edge and the longest name ("Photography & Videography", ~179px) fits on one line
- * down to a 360px screen. Wider phones (sm) spread each list across one row of columns instead.
- */
 const PHONE_LINK_GRID = "grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] gap-x-3 gap-y-1.5";
 
 /** A four-point gold star, the ornament between the invitation and the links. */
@@ -108,11 +103,6 @@ function LinkColumn({
   );
 }
 
-/**
- * "Back to top" as a seal on the closing rule: lettering turns slowly around a gold arrow. The
- * lettering is a decorative sibling laid over the link (not inside it), so the link's name is just
- * "Back to top" and the whole seal stays clickable.
- */
 function BackToTop({ className }: { className?: string }) {
   return (
     <Magnetic strength={0.3} className={cn("group relative size-[5.5rem]", className)}>
@@ -322,7 +312,12 @@ export function SiteFooter() {
 
       {/* 4 · The closing rule with the back-to-top seal; account links and copyright beside it */}
       <div className="container-page pt-10 pb-8 sm:pt-14 sm:pb-10">
-        <div className="relative grid grid-cols-1 justify-items-center gap-5 text-xs text-background/60 sm:grid-cols-[1fr_auto_1fr] sm:items-end sm:gap-x-6 sm:gap-y-1">
+        {/* data-keep-clear: the home page's fixed music button rises above whichever of these items would
+            sit beside it, instead of covering them. */}
+        <div
+          data-keep-clear
+          className="relative grid grid-cols-1 justify-items-center gap-5 text-xs text-background/60 sm:grid-cols-[1fr_auto_1fr] sm:items-end sm:gap-x-6 sm:gap-y-1"
+        >
           <span
             aria-hidden="true"
             className="absolute inset-x-0 top-[2.75rem] h-px bg-linear-to-r from-transparent via-gold/35 to-transparent"

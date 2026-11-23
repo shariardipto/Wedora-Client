@@ -4,11 +4,21 @@ import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { GoldDust } from "@/components/motion/gold-dust";
-import { introHolds, markIntroDone, markIntroLogoWritten, startIntro } from "@/lib/intro";
-
-/** The longest the still logo waits, once the page is ready, for work held for it (the 3D hero). */
-const MAX_HOLD_MS = 1200;
 import { gsap, useGSAP } from "@/lib/gsap";
+import { introStartHolds, markIntroDone, startIntro } from "@/lib/intro";
+
+/** The longest the logo waits, before writing, for work held for it (the 3D hero's set-up). */
+const MAX_HOLD_MS = 1500;
+/** Before writing, the logo waits for the page's start-up work (the 3D hero), at most MAX_HOLD_MS. */
+const waitForHeldWork = () => introStartHolds(MAX_HOLD_MS);
+
+/**
+ * After the logo's shine (seconds): the logo softens away, and the page starts opening this far into
+ * that fade, unhurried (owner: opening at once felt too fast; the old 1.3–3.2 s wait, too slow).
+ */
+const LOGO_FADE = 0.6;
+const OPEN_AT = 0.3;
+const OPEN_DURATION = 1.2;
 
 const MAX_WAIT_MS = 4000;
 
@@ -35,9 +45,10 @@ export function PageLoader() {
 
 /**
  * The intro itself:
- * the Wedora logo writes itself on deep wine (the approved animation, at full speed).
- * Then the logo softens and fades in the centre, and the page opens from the centre
- * outward through a soft-edged circle as the panel dissolves.
+ * the Wedora logo writes itself on deep wine (the approved animation, at full speed). Heavy start-up
+ * work (the hero's 3D scene) is done before the first stroke, while only the gold dust shows. The
+ * moment the logo's shine ends, the page opens from the centre outward through a soft-edged circle
+ * while the logo softens away and the panel dissolves.
  *
  * Server-rendered so it covers the page from the first paint; CSS keeps it
  * hidden without JavaScript or with reduced motion, and a 9 s CSS fallback
@@ -74,6 +85,9 @@ function HomeIntro() {
       // Entrance animations on the page (afterIntro) wait for this intro, also on a repeat visit.
       startIntro();
       html.classList.add("intro-active");
+      // The script is running and ends the intro itself, so the no-script fallback (hide at 9 s) moves
+      // later: the logo may wait up to MAX_HOLD_MS for the 3D scene before it starts writing.
+      el.style.animationDelay = "15s";
       const logo = gsap.utils.selector(el)("[data-loader-logo]")[0];
       // Enter: the logo writes itself (AnimatedLogo, once, at full speed).
       gsap.set(logo ?? [], { autoAlpha: 1 });
@@ -84,22 +98,27 @@ function HomeIntro() {
             onLogoWritten.current = resolve;
           });
       let cancelled = false;
-      // Open once the logo is written and the page is ready, plus a brief wait (capped) for work held
-      // for the still logo: the hero's 3D scene sets up there, unseen, and starts as the intro fades.
-      void Promise.all([written, pageReady()]).then(() => introHolds(MAX_HOLD_MS)).then(() => {
+      // The exit starts as soon as the logo is written (its shine has just ended) and the page is ready.
+      // Nothing else is waited for here: the 3D scene was set up before the writing began.
+      void Promise.all([written, pageReady()]).then(() => {
         if (cancelled) return;
         const exit = gsap.timeline({ onComplete: finish });
         exit
           // The finished logo softens and fades in place, in the centre.
-          .to(logo ?? [], { autoAlpha: 0, scale: 1.05, filter: "blur(6px)", duration: 0.65, ease: "power2.in" })
-          // The page then opens from the centre outward: a soft-edged circle grows (CSS mask driven by
-          // --iris, see .page-loader-exit) while the panel dissolves. The page's own entrance starts with it.
-          .call(() => {
-            el.classList.add("page-loader-exit");
-            markIntroDone();
-          }, [], ">-0.2")
-          .fromTo(el, { "--iris": "0vmax" }, { "--iris": "95vmax", duration: 1.1, ease: "power2.inOut" }, "<")
-          .to(el, { autoAlpha: 0, duration: 0.5, ease: "power1.out" }, ">-0.5");
+          .to(logo ?? [], { autoAlpha: 0, scale: 1.05, filter: "blur(6px)", duration: LOGO_FADE, ease: "power2.in" }, 0)
+          // Part-way through, the page opens from the centre outward: a soft-edged circle grows (CSS mask
+          // driven by --iris, see .page-loader-exit) while the panel dissolves. The page's own entrance
+          // starts with it.
+          .call(
+            () => {
+              el.classList.add("page-loader-exit");
+              markIntroDone();
+            },
+            [],
+            OPEN_AT,
+          )
+          .fromTo(el, { "--iris": "0vmax" }, { "--iris": "95vmax", duration: OPEN_DURATION, ease: "power2.inOut" }, OPEN_AT)
+          .to(el, { autoAlpha: 0, duration: 0.5, ease: "power1.out" }, OPEN_AT + OPEN_DURATION - 0.5);
       });
 
       return () => {
@@ -127,12 +146,12 @@ function HomeIntro() {
             mode="once"
             speed={1}
             waitForIdle
+            startAfter={waitForHeldWork}
             className="h-24 -translate-x-[10%] -translate-y-[2%] sm:h-32"
             wordClassName="fill-white"
             onComplete={() => {
               logoWritten.current = true;
               onLogoWritten.current?.();
-              markIntroLogoWritten();
             }}
           />
         </div>

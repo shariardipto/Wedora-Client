@@ -105,6 +105,12 @@ Services are grouped into six categories: Photography & Videography, Wedding Ven
   - **An animated logo that writes itself** (SVG and GSAP): it loops in the navbar, footer and sign-in panel, and opens the home page as a full-page intro.
   - A WebGL hero (Three.js with React Three Fiber) and GSAP text reveals. Cards rise in one by one as they scroll into view.
   - A closing footer scene: the WEDORA wordmark writes itself while a gold light drifts through the letters and follows the cursor.
+  - **Background music on the home page:**
+    - It starts by itself after the intro, as soon as the browser allows: right away if the visitor has already clicked or lets the site autoplay, otherwise on their first click, tap or key press (browsers block sound before that, so a short hint says "Click anywhere for music"). A pause is remembered for the visit.
+    - While it plays, faint, thin gold bars grow out of the arch frames (the hero photo and "Why couples choose Wedora") and follow the music.
+    - A small play/pause button stays in the corner.
+    - The music plays at a low level on every device, including iPhones (Web Audio).
+    - It pauses with the tab and fades out when the visitor leaves the page.
   - Lenis smooth scrolling, tilt cards, and a floating glass navbar.
 - **Responsive and accessible:**
   - Mobile-first layouts with no horizontal scrolling. On phones the dashboards switch to a one-row tab bar, and admin tables become card lists.
@@ -228,6 +234,7 @@ Copy [`.env.example`](.env.example) to `.env.local`. Only variables prefixed wit
 | `IMGBB_API_KEY` | ✓ | ImgBB key for profile and service photos (server-side only) |
 | `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | | Used only by `npm run seed:admin` |
 | `DEMO_PASSWORD` | | Optional password for accounts created by `npm run seed:demo` |
+| `NEXT_PUBLIC_MUSIC_URL` | | Public URL of the home page's background music (e.g. a Cloudflare R2 file). Its host must allow this site's origins through CORS (`GET`, `HEAD`). Leave it empty to turn the music off |
 
 ## Scripts
 
@@ -245,7 +252,7 @@ Copy [`.env.example`](.env.example) to `.env.local`. Only variables prefixed wit
 ## Quality
 
 - **Static checks:** strict TypeScript and ESLint with a zero-warning policy.
-- **Unit tests:** 71 Vitest tests. They cover sign-up and profile validation, safe redirect handling, service and admin query parsing, booking validation, billing helpers, date and money formatting, image upload checks, the in-browser image shrinking, and the animated logo's timeline.
+- **Unit tests:** 83 Vitest tests. They cover sign-up and profile validation, safe redirect handling, service and admin query parsing, booking validation, billing helpers, date and money formatting, image upload checks, the in-browser image shrinking, the animated logo's timeline, the database reconnect, and the music visualizer's level maths.
 - **Lighthouse on the live site** (desktop, November 2026):
   - Performance: Home 98, Browse Services 94, Sign In 97.
   - Layout shift (CLS): 0.

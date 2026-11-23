@@ -15,9 +15,11 @@ import {
 import { Magnetic } from "@/components/motion/magnetic";
 import { Button } from "@/components/ui/button";
 import { MOTION_OK, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
-import { afterIntro, holdIntroOpen, introRunning, whileIntroHolds } from "@/lib/intro";
+import { afterIntro, holdIntroStart, introRunning } from "@/lib/intro";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/images/hero-couple.jpg";
+import { MusicBurst } from "./music-burst";
+import { MusicToggle } from "./music-toggle";
 
 const HeroScene = dynamic(() => import("./hero-scene"), { ssr: false });
 
@@ -51,12 +53,13 @@ function canRunScene(): boolean {
 }
 
 /**
- * When to mount the WebGL scene (rings, petals, gold dust). Its set-up blocks the main thread for
- * about half a second (up to 1.5 s measured); started while the intro logo was being written, it
- * froze the drawing mid-stroke. So, with the intro running, the scene sets up and draws its first
- * frame while the intro shows its finished, still logo (a blocked frame isn't seen there; the intro
- * waits for it, capped), and it starts moving as the intro fades. Without an intro it starts at the
- * first idle moment.
+ * When to mount the WebGL scene (rings, petals, gold dust). Its set-up blocked the main thread for up
+ * to 1.5 s (measured); started while the intro logo was being written, it froze the drawing
+ * mid-stroke, and set up after the logo it delayed the page's opening by 1.3–3.2 s (owner: "it should
+ * be instant after the shine"). So, with the intro running, it sets up and draws its first frame
+ * before the logo starts writing, while the panel shows only its (CSS) gold dust; the logo waits for
+ * it, capped, and the scene starts moving as the intro opens. Without an intro it starts at the first
+ * idle moment.
  */
 function useHeroScene() {
   const [enabled, setEnabled] = useState(false);
@@ -67,13 +70,13 @@ function useHeroScene() {
     const nav = navigator as Navigator & { deviceMemory?: number };
     if ((nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4) return;
     if (introRunning()) {
-      holdIntroOpen(new Promise<void>((resolve) => (releaseIntro.current = resolve)));
-      const cancelPrepare = whileIntroHolds(() => {
+      holdIntroStart(new Promise<void>((resolve) => (releaseIntro.current = resolve)));
+      const frame = requestAnimationFrame(() => {
         if (canRunScene()) setEnabled(true);
         else releaseIntro.current();
       });
       return () => {
-        cancelPrepare();
+        cancelAnimationFrame(frame);
         releaseIntro.current();
       };
     }
@@ -298,7 +301,9 @@ export function Hero() {
         <div className="relative hidden lg:block">
           <div className="relative mx-auto w-full max-w-[26rem]">
             <div data-hero-visual className="relative">
-              <div aria-hidden="true" className="absolute -inset-4 rounded-t-[999px] rounded-b-[2.6rem] border border-gold/35" />
+              {/* Music visualizer: faint bars standing out from the outline; moves with the frame. */}
+              <MusicBurst />
+              <div aria-hidden="true" data-music-outline className="absolute -inset-4 rounded-t-[999px] rounded-b-[2.6rem] border border-gold/35" />
               <div
                 data-reveal
                 data-hero-frame
@@ -367,6 +372,8 @@ export function Hero() {
         Scroll
         <span className="scroll-cue-line h-10 w-px overflow-hidden bg-background/15" />
       </div>
+
+      <MusicToggle />
     </section>
   );
 }

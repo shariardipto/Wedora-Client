@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { ParallaxLayer } from "@/components/motion/scroll-effects";
+import { MusicBurst } from "./music-burst";
 import { SectionHeading } from "./section-heading";
 import bouquetImage from "@/assets/images/bouquet.jpg";
 import ringsImage from "@/assets/images/rings.jpg";
@@ -48,9 +49,13 @@ export function WhyChoose() {
             background. The entrance animation's transform made that true only while it played, so
             the old decorative ring vanished once the photo had faded in. */}
         <Reveal className="relative isolate mx-auto w-full max-w-md lg:max-w-none">
+          {/* Music visualizer: faint gold bars standing out from the frame while the music plays. On
+              phones, where the photo nearly fills the width, they crown the arch and fade out down its sides. */}
+          <MusicBurst tone="gold" />
           {/* A fine gold arch drawn just outside the photo, the same frame as the hero's arch photo. */}
           <div
             aria-hidden="true"
+            data-music-outline
             className="absolute -inset-3 -z-10 rounded-t-[999px] rounded-b-[2.25rem] border border-gold/50 sm:-inset-4 sm:rounded-b-[2.5rem]"
           />
           {/* Arch-framed main photo — a nod to ceremony arches. */}

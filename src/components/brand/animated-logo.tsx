@@ -44,6 +44,12 @@ type AnimatedLogoProps = {
    * plays while the page is loading.
    */
   waitForIdle?: boolean;
+  /**
+   * Work to wait for before writing starts (checked at the first idle moment, so the page's start-up
+   * has registered it). The full-page intro uses it so the hero's 3D scene is set up before the first
+   * stroke, rather than freezing the writing or delaying the page's opening.
+   */
+  startAfter?: () => Promise<void>;
   onComplete?: () => void;
   /** Size classes for the logo, e.g. "h-10 md:h-11". */
   className?: string;
@@ -66,15 +72,18 @@ export function AnimatedLogo({
   speed = 1,
   afterPageIntro = false,
   waitForIdle = false,
+  startAfter,
   onComplete,
   className,
   wordClassName,
 }: AnimatedLogoProps) {
   const svg = useRef<SVGSVGElement>(null);
   const done = useRef(onComplete);
+  const prepared = useRef(startAfter);
   useEffect(() => {
     done.current = onComplete;
-  }, [onComplete]);
+    prepared.current = startAfter;
+  }, [onComplete, startAfter]);
 
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const id = (name: string) => `alogo-${uid}-${name}`;
@@ -177,9 +186,21 @@ export function AnimatedLogo({
         if (onScreen) play();
       };
       let idle = 0;
+      let cancelled = false;
+      const whenIdle = (run: () => void) => {
+        if (waitForIdle && "requestIdleCallback" in window) idle = window.requestIdleCallback(run, { timeout: 700 });
+        else run();
+      };
       const begin = () => {
-        if (waitForIdle && "requestIdleCallback" in window) idle = window.requestIdleCallback(start, { timeout: 700 });
-        else start();
+        const waitFor = prepared.current;
+        if (!waitFor) return whenIdle(start);
+        // Idle first (start-up effects have registered their work by then), wait for that work, then
+        // start at the next idle moment, once whatever it left behind has settled.
+        whenIdle(() => {
+          void waitFor().then(() => {
+            if (!cancelled) whenIdle(start);
+          });
+        });
       };
       const cancelStart = afterPageIntro ? afterIntro(begin) : (begin(), () => undefined);
 
@@ -195,6 +216,7 @@ export function AnimatedLogo({
         observer.observe(el);
       }
       return () => {
+        cancelled = true;
         cancelStart();
         if (idle) window.cancelIdleCallback(idle);
         observer?.disconnect();
