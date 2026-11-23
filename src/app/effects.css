@@ -388,6 +388,104 @@
     }
   }
 
+  /* Site footer (components/layout/site-footer.tsx): the hero's golden-hour palette, darker. */
+  .footer-backdrop {
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgb(201 155 94 / 0.2), transparent 70%),
+      radial-gradient(45% 45% at 0% 100%, rgb(107 45 63 / 0.5), transparent 70%),
+      radial-gradient(40% 40% at 100% 80%, rgb(74 31 44 / 0.7), transparent 70%),
+      linear-gradient(180deg, #1d0e13 0%, var(--night) 45%, #1c1316 100%);
+  }
+  /* A gold hairline along the top edge, with a light gliding across it (the navbar's edge-light, unrolled). */
+  .footer-edge {
+    position: absolute;
+    top: 0;
+    inset-inline: 10%;
+    height: 1px;
+    overflow: hidden;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgb(220 191 142 / 0.45) 50%, transparent);
+  }
+  .footer-edge::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 20%;
+    background: linear-gradient(90deg, transparent, #f6e3b8, transparent);
+    transform: translateX(-100%);
+  }
+  /* Links: a gold dash slides in and the label steps aside. */
+  .footer-link {
+    position: relative;
+    display: inline-block;
+    color: rgb(251 248 243 / 0.72);
+    transition:
+      color 0.35s ease,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .footer-link::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -1rem;
+    width: 0.65rem;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .footer-link:hover,
+  .footer-link:focus-visible {
+    color: var(--gold-light);
+    outline: none;
+  }
+  .footer-link:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .footer-link:hover {
+      transform: translateX(1rem);
+    }
+    .footer-link:hover::before {
+      transform: scaleX(1);
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .footer-edge::after {
+      animation: footer-edge 8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    }
+    .footer-star {
+      animation: footer-star 6s ease-in-out infinite;
+    }
+    .footer-seal-ring {
+      animation: footer-seal 18s linear infinite;
+    }
+  }
+  @keyframes footer-edge {
+    to {
+      transform: translateX(500%);
+    }
+  }
+  @keyframes footer-star {
+    0%,
+    100% {
+      transform: rotate(0deg) scale(0.85);
+      opacity: 0.75;
+    }
+    50% {
+      transform: rotate(90deg) scale(1.15);
+      opacity: 1;
+    }
+  }
+  @keyframes footer-seal {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   /* Slowly rotating aurora behind the vendor band. */
   .aurora {
     position: relative;

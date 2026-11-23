@@ -11,6 +11,8 @@ type SectionHeadingProps = {
   description?: string;
   align?: "center" | "left";
   className?: string;
+  /** Extra classes for the title, e.g. a larger size. */
+  titleClassName?: string;
   /** Light text for dark sections. */
   tone?: "default" | "light";
 };
@@ -23,6 +25,7 @@ export function SectionHeading({
   description,
   align = "center",
   className,
+  titleClassName,
   tone = "default",
 }: SectionHeadingProps) {
   const root = useRef<HTMLDivElement>(null);
@@ -66,6 +69,7 @@ export function SectionHeading({
         className={cn(
           "mt-4 text-4xl leading-[1.1] font-semibold sm:text-5xl",
           tone === "light" ? "text-background" : "text-foreground",
+          titleClassName,
         )}
       >
         {title}
