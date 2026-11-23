@@ -311,7 +311,10 @@ export function Hero() {
                   fill
                   preload
                   placeholder="blur"
-                  sizes="(min-width: 1024px) 26rem, 1px"
+                  // The 3:2 photo covers a 26 × 32.5rem portrait frame, so it is drawn 32.5 × 1.5 ≈ 49rem
+                  // wide (cropped). Asking for the frame's width (26rem) got a file half as wide as needed.
+                  sizes="(min-width: 1024px) 49rem, 1px"
+                  quality={90}
                   className="object-cover object-[62%_center]"
                 />
                 <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-night/45 via-transparent to-transparent" />

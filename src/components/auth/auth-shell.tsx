@@ -25,7 +25,10 @@ export function AuthShell({ title, description, children, quote }: AuthShellProp
             alt=""
             fill
             placeholder="blur"
-            sizes="40vw"
+            // The 3:2 photo covers a tall panel (about 30rem wide, up to ~56rem tall on sign-up), so it
+            // is drawn up to ~85rem wide. Hidden below lg, where the 1px hint keeps it from loading.
+            sizes="(min-width: 1024px) 85rem, 1px"
+            quality={90}
             className="-z-20 object-cover object-[62%_center]"
           />
           <div
