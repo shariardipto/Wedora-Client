@@ -41,7 +41,15 @@ export function WhyChoose() {
       className="section-y overflow-hidden bg-card"
     >
       <div className="container-page grid grid-cols-1 items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-        <Reveal className="relative mx-auto w-full max-w-md lg:max-w-none">
+        {/* isolate: the frame below sits behind the photo (-z-10) but must stay above the section's
+            background. The entrance animation's transform made that true only while it played, so
+            the old decorative ring vanished once the photo had faded in. */}
+        <Reveal className="relative isolate mx-auto w-full max-w-md lg:max-w-none">
+          {/* A fine gold arch drawn just outside the photo, the same frame as the hero's arch photo. */}
+          <div
+            aria-hidden="true"
+            className="absolute -inset-3 -z-10 rounded-t-[999px] rounded-b-[2.25rem] border border-gold/50 sm:-inset-4 sm:rounded-b-[2.5rem]"
+          />
           {/* Arch-framed main photo — a nod to ceremony arches. */}
           <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-3xl shadow-xl ring-1 ring-black/5">
             <ParallaxLayer amount={6}>
@@ -67,10 +75,6 @@ export function WhyChoose() {
               />
             </ParallaxLayer>
           </div>
-          <div
-            aria-hidden="true"
-            className="absolute -top-5 -left-5 -z-10 size-28 rounded-full border border-gold/50"
-          />
         </Reveal>
 
         <div>
