@@ -38,6 +38,12 @@ type AnimatedLogoProps = {
   speed?: number;
   /** Start only after the full-page intro has revealed the page. */
   afterPageIntro?: boolean;
+  /**
+   * Start at the first idle moment (at most 0.7 s later; start-up work measured at about 0.3–0.45 s),
+   * so the first strokes don't compete with the page's start-up. Used by the full-page intro, which
+   * plays while the page is loading.
+   */
+  waitForIdle?: boolean;
   onComplete?: () => void;
   /** Size classes for the logo, e.g. "h-10 md:h-11". */
   className?: string;
@@ -55,7 +61,15 @@ const BAR_STYLE = { transformBox: "fill-box", transformOrigin: "50% 50%" } as co
  * sweeps across. Pure SVG + GSAP. The server renders the finished logo; with reduced motion it stays
  * static. Loops pause while off-screen.
  */
-export function AnimatedLogo({ mode, speed = 1, afterPageIntro = false, onComplete, className, wordClassName }: AnimatedLogoProps) {
+export function AnimatedLogo({
+  mode,
+  speed = 1,
+  afterPageIntro = false,
+  waitForIdle = false,
+  onComplete,
+  className,
+  wordClassName,
+}: AnimatedLogoProps) {
   const svg = useRef<SVGSVGElement>(null);
   const done = useRef(onComplete);
   useEffect(() => {
@@ -137,15 +151,37 @@ export function AnimatedLogo({ mode, speed = 1, afterPageIntro = false, onComple
               .to({}, { duration: LOGO_HOLD_END / 1000 })
               .to(clock, { t: 0, duration: seconds, ease: "none", onUpdate: draw })
               .to({}, { duration: LOGO_HOLD_START / 1000 });
-      timeline.timeScale(speed);
+      // The timeline is driven from the ticker in capped steps instead of running on wall-clock time:
+      // when the main thread is blocked (page start-up, decoding), the drawing pauses for a beat rather
+      // than jumping ahead and skipping strokes. (GSAP's own lag smoothing is off site-wide for Lenis.)
+      let ticking = false;
+      const step = (_time: number, deltaMs: number) => {
+        timeline.totalTime(timeline.totalTime() + (Math.min(deltaMs, 34) / 1000) * speed);
+        if (mode === "once" && timeline.progress() >= 1) stop();
+      };
+      const play = () => {
+        if (ticking) return;
+        ticking = true;
+        gsap.ticker.add(step);
+      };
+      function stop() {
+        if (!ticking) return;
+        ticking = false;
+        gsap.ticker.remove(step);
+      }
 
       let started = false;
       let onScreen = true;
       const start = () => {
         started = true;
-        if (onScreen) timeline.play();
+        if (onScreen) play();
       };
-      const cancelStart = afterPageIntro ? afterIntro(start) : (start(), () => undefined);
+      let idle = 0;
+      const begin = () => {
+        if (waitForIdle && "requestIdleCallback" in window) idle = window.requestIdleCallback(start, { timeout: 700 });
+        else start();
+      };
+      const cancelStart = afterPageIntro ? afterIntro(begin) : (begin(), () => undefined);
 
       // Loops pause while scrolled out of view.
       let observer: IntersectionObserver | undefined;
@@ -153,18 +189,20 @@ export function AnimatedLogo({ mode, speed = 1, afterPageIntro = false, onComple
         observer = new IntersectionObserver(([entry]) => {
           onScreen = entry.isIntersecting;
           if (!started) return;
-          if (onScreen) timeline.play();
-          else timeline.pause();
+          if (onScreen) play();
+          else stop();
         });
         observer.observe(el);
       }
       return () => {
         cancelStart();
+        if (idle) window.cancelIdleCallback(idle);
         observer?.disconnect();
+        stop();
         timeline.kill();
       };
     },
-    { scope: svg, dependencies: [mode, speed, afterPageIntro] },
+    { scope: svg, dependencies: [mode, speed, afterPageIntro, waitForIdle] },
   );
 
   return (

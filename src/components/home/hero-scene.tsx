@@ -367,7 +367,30 @@ function GoldDust({ count }: { count: number }) {
   return <points ref={points} geometry={geometry} material={material} frustumCulled={false} />;
 }
 
-export default function HeroScene({ rootRef, onReady }: { rootRef: RootRef; onReady: () => void }) {
+/** Calls `onReady` once the first frame has been drawn (so its shaders are compiled). */
+function FirstFrame({ onReady }: { onReady: () => void }) {
+  const called = useRef(false);
+  useFrame(() => {
+    if (called.current) return;
+    called.current = true;
+    requestAnimationFrame(() => onReady());
+  });
+  return null;
+}
+
+/**
+ * `playing={false}`: draw one frame (the expensive part: shader compilation) and hold still, so the
+ * scene can be prepared out of sight and start moving the moment it is shown.
+ */
+export default function HeroScene({
+  rootRef,
+  onReady,
+  playing = true,
+}: {
+  rootRef: RootRef;
+  onReady: () => void;
+  playing?: boolean;
+}) {
   const [active, setActive] = useState(true);
   const [compact] = useState(() => window.innerWidth < 768);
   const disposeEnvironment = useRef<(() => void) | null>(null);
@@ -388,11 +411,10 @@ export default function HeroScene({ rootRef, onReady }: { rootRef: RootRef; onRe
       dpr={[1, compact ? 1.25 : 1.5]}
       camera={{ position: [0, 0, 6], fov: 35, near: 0.1, far: 40 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      frameloop={active ? "always" : "never"}
+      frameloop={!active ? "never" : playing ? "always" : "demand"}
       onCreated={({ gl, scene }) => {
         gl.toneMappingExposure = 1.15;
         disposeEnvironment.current = applyStudioEnvironment(gl, scene);
-        requestAnimationFrame(() => onReady());
       }}
       style={{ pointerEvents: "none" }}
     >
@@ -402,6 +424,7 @@ export default function HeroScene({ rootRef, onReady }: { rootRef: RootRef; onRe
       <Rings rootRef={rootRef} />
       <Petals count={compact ? 24 : 60} />
       <GoldDust count={compact ? 70 : 160} />
+      <FirstFrame onReady={onReady} />
     </Canvas>
   );
 }

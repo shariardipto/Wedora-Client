@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +15,7 @@ import {
 import { Magnetic } from "@/components/motion/magnetic";
 import { Button } from "@/components/ui/button";
 import { MOTION_OK, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
-import { afterIntro } from "@/lib/intro";
+import { afterIntro, holdIntroOpen, introRunning, whileIntroHolds } from "@/lib/intro";
 import { cn } from "@/lib/utils";
 import heroImage from "@/assets/images/hero-couple.jpg";
 
@@ -29,44 +29,76 @@ const highlights = [
   { icon: CalendarCheckIcon, label: "Live status on every request" },
 ];
 
-/** Mounts the WebGL scene only when it can run well: WebGL available, motion allowed, page idle. */
-function useSceneEnabled() {
+/**
+ * Whether this device can run the WebGL scene well. No real GPU (hardware acceleration off, VMs,
+ * headless): browsers fall back to software WebGL, which runs the scene on the CPU and makes the
+ * whole page lag, so those keep the static hero.
+ */
+function canRunScene(): boolean {
+  const probe = document.createElement("canvas");
+  const options: WebGLContextAttributes = { failIfMajorPerformanceCaveat: true };
+  const context: WebGLRenderingContext | WebGL2RenderingContext | null =
+    probe.getContext("webgl2", options) ?? probe.getContext("webgl", options);
+  if (!context) return false;
+  let renderer = String(context.getParameter(context.RENDERER) ?? "");
+  if (/^webkit webgl$/i.test(renderer)) {
+    // Chrome/Safari mask RENDERER; Firefox already returns the real (sanitised) name.
+    const debug = context.getExtension("WEBGL_debug_renderer_info");
+    if (debug) renderer = String(context.getParameter(debug.UNMASKED_RENDERER_WEBGL) ?? "");
+  }
+  context.getExtension("WEBGL_lose_context")?.loseContext();
+  return !/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer);
+}
+
+/**
+ * When to mount the WebGL scene (rings, petals, gold dust). Its set-up blocks the main thread for
+ * about half a second (up to 1.5 s measured); started while the intro logo was being written, it
+ * froze the drawing mid-stroke. So, with the intro running, the scene sets up and draws its first
+ * frame while the intro shows its finished, still logo (a blocked frame isn't seen there; the intro
+ * waits for it, capped), and it starts moving as the intro fades. Without an intro it starts at the
+ * first idle moment.
+ */
+function useHeroScene() {
   const [enabled, setEnabled] = useState(false);
+  const releaseIntro = useRef<() => void>(() => undefined);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     // Low-end devices keep the static hero (photo + gradient): smooth scrolling matters more.
     const nav = navigator as Navigator & { deviceMemory?: number };
     if ((nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) <= 4) return;
-    // No real GPU (hardware acceleration off, VMs, headless): browsers fall back to software
-    // WebGL, which runs the scene on the CPU and makes the whole page lag. Keep the static hero.
-    const probe = document.createElement("canvas");
-    const options: WebGLContextAttributes = { failIfMajorPerformanceCaveat: true };
-    const context: WebGLRenderingContext | WebGL2RenderingContext | null =
-      probe.getContext("webgl2", options) ?? probe.getContext("webgl", options);
-    if (!context) return;
-    let renderer = String(context.getParameter(context.RENDERER) ?? "");
-    if (/^webkit webgl$/i.test(renderer)) {
-      // Chrome/Safari mask RENDERER; Firefox already returns the real (sanitised) name.
-      const debug = context.getExtension("WEBGL_debug_renderer_info");
-      if (debug) renderer = String(context.getParameter(debug.UNMASKED_RENDERER_WEBGL) ?? "");
+    if (introRunning()) {
+      holdIntroOpen(new Promise<void>((resolve) => (releaseIntro.current = resolve)));
+      const cancelPrepare = whileIntroHolds(() => {
+        if (canRunScene()) setEnabled(true);
+        else releaseIntro.current();
+      });
+      return () => {
+        cancelPrepare();
+        releaseIntro.current();
+      };
     }
-    context.getExtension("WEBGL_lose_context")?.loseContext();
-    if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer)) return;
-    const enable = () => setEnabled(true);
+    const enable = () => {
+      if (canRunScene()) setEnabled(true);
+    };
     if ("requestIdleCallback" in window) {
-      const id = window.requestIdleCallback(enable, { timeout: 1200 });
-      return () => window.cancelIdleCallback(id);
+      const idle = window.requestIdleCallback(enable, { timeout: 1200 });
+      return () => window.cancelIdleCallback(idle);
     }
-    const id = setTimeout(enable, 250);
-    return () => clearTimeout(id);
+    const timer = setTimeout(enable, 250);
+    return () => clearTimeout(timer);
   }, []);
-  return enabled;
+  // Called once the scene has drawn its first frame: the intro may open.
+  const onFirstFrame = useCallback(() => releaseIntro.current(), []);
+  return { enabled, onFirstFrame };
 }
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
-  const sceneEnabled = useSceneEnabled();
+  const { enabled: sceneEnabled, onFirstFrame } = useHeroScene();
   const [sceneReady, setSceneReady] = useState(false);
+  // The rings and petals start moving (and fade in) as the intro fades; right away without an intro.
+  const [introOpen, setIntroOpen] = useState(false);
+  useEffect(() => afterIntro(() => setIntroOpen(true)), []);
 
   useGSAP(
     () => {
@@ -185,11 +217,20 @@ export function Hero() {
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute inset-0 z-10 transition-opacity duration-[1600ms] ease-out",
-          sceneReady ? "opacity-100" : "opacity-0",
+          "pointer-events-none absolute inset-0 z-10 transition-opacity duration-1000 ease-out",
+          sceneReady && introOpen ? "opacity-100" : "opacity-0",
         )}
       >
-        {sceneEnabled && <HeroScene rootRef={root} onReady={() => setSceneReady(true)} />}
+        {sceneEnabled && (
+          <HeroScene
+            rootRef={root}
+            playing={introOpen}
+            onReady={() => {
+              setSceneReady(true);
+              onFirstFrame();
+            }}
+          />
+        )}
       </div>
       <div aria-hidden="true" data-ring-anchor className="absolute top-[7%] right-[-5%] size-36 sm:top-[5%] sm:size-44 lg:hidden" />
 

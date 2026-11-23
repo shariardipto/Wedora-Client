@@ -4,7 +4,10 @@ import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatedLogo } from "@/components/brand/animated-logo";
 import { GoldDust } from "@/components/motion/gold-dust";
-import { markIntroDone, startIntro } from "@/lib/intro";
+import { introHolds, markIntroDone, markIntroLogoWritten, startIntro } from "@/lib/intro";
+
+/** The longest the still logo waits, once the page is ready, for work held for it (the 3D hero). */
+const MAX_HOLD_MS = 1200;
 import { gsap, useGSAP } from "@/lib/gsap";
 
 const MAX_WAIT_MS = 4000;
@@ -81,7 +84,9 @@ function HomeIntro() {
             onLogoWritten.current = resolve;
           });
       let cancelled = false;
-      void Promise.all([written, pageReady()]).then(() => {
+      // Open once the logo is written and the page is ready, plus a brief wait (capped) for work held
+      // for the still logo: the hero's 3D scene sets up there, unseen, and starts as the intro fades.
+      void Promise.all([written, pageReady()]).then(() => introHolds(MAX_HOLD_MS)).then(() => {
         if (cancelled) return;
         const exit = gsap.timeline({ onComplete: finish });
         exit
@@ -121,11 +126,13 @@ function HomeIntro() {
           <AnimatedLogo
             mode="once"
             speed={1}
+            waitForIdle
             className="h-24 -translate-x-[10%] -translate-y-[2%] sm:h-32"
             wordClassName="fill-white"
             onComplete={() => {
               logoWritten.current = true;
               onLogoWritten.current?.();
+              markIntroLogoWritten();
             }}
           />
         </div>
