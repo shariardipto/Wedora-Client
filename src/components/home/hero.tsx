@@ -6,11 +6,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRightIcon,
+  BadgeCheckIcon,
   CalendarCheckIcon,
-  HeartIcon,
+  CalendarHeartIcon,
+  HeartHandshakeIcon,
   LayoutGridIcon,
-  ShieldCheckIcon,
-  SparklesIcon,
 } from "lucide-react";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Button } from "@/components/ui/button";
@@ -21,10 +21,12 @@ import heroImage from "@/assets/images/hero-couple.jpg";
 
 const HeroScene = dynamic(() => import("./hero-scene"), { ssr: false });
 
+// What couples actually get, in their words. Every line is true of the product: our team approves
+// each listing before it goes live, couples never pay Wedora, and each request shows its live status.
 const highlights = [
-  { icon: ShieldCheckIcon, label: "Admin-reviewed vendors" },
-  { icon: HeartIcon, label: "Free for couples" },
-  { icon: CalendarCheckIcon, label: "Track every request" },
+  { icon: BadgeCheckIcon, label: "Every vendor hand-approved" },
+  { icon: HeartHandshakeIcon, label: "No fees for couples" },
+  { icon: CalendarCheckIcon, label: "Live status on every request" },
 ];
 
 /** Mounts the WebGL scene only when it can run well: WebGL available, motion allowed, page idle. */
@@ -284,21 +286,28 @@ export function Hero() {
                 <LayoutGridIcon className="size-4" aria-hidden="true" />
               </span>
               <span className="text-sm leading-tight">
-                <span className="block font-semibold">6 categories</span>
-                <span className="text-background/70">One trusted place</span>
+                <span className="block font-semibold">From venue to vows</span>
+                <span className="text-background/70">Six specialties, one search</span>
               </span>
             </div>
+            {/* A glimpse of the product: the update a couple sees when a vendor says yes (illustrative,
+                so hidden from assistive tech; the vendor is one from the catalog). */}
             <div
               data-reveal
               data-hero-chip
+              aria-hidden="true"
               className="glass-chip absolute -right-12 bottom-[14%] z-20 flex items-center gap-3 rounded-2xl px-4 py-3"
             >
               <span className="grid size-9 place-items-center rounded-full bg-background/90 text-primary">
-                <SparklesIcon className="size-4" aria-hidden="true" />
+                <CalendarHeartIcon className="size-4" />
               </span>
               <span className="text-sm leading-tight">
-                <span className="block font-semibold">Request in minutes</span>
-                <span className="text-background/70">Track every reply</span>
+                <span className="block font-semibold">Request accepted</span>
+                <span className="flex items-center gap-1.5 text-background/70">
+                  Ivory Lens Studio
+                  <span className="size-1.5 rounded-full bg-emerald-400" />
+                  just now
+                </span>
               </span>
             </div>
             <div aria-hidden="true" data-ring-anchor className="absolute -bottom-10 -left-14 size-56" />
